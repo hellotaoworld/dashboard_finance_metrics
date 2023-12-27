@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { getSectors } from '../services'
-import Filters from '@/components/Header/Filters'
 import { SectorComponent } from '@/components'
+
 
 
 export default function Home({ sectors }) {
