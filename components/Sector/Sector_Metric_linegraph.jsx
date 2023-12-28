@@ -1,7 +1,8 @@
 import { Chart } from "chart.js/auto"
 import React, { useRef, useEffect } from 'react'
+import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 
-const Sector_Metric_graph = ({ input, metric }) => {
+const Sector_Metric_linegraph = ({ input, metric }) => {
     const chartRef = useRef(null)
 
     useEffect(() => {
@@ -49,10 +50,8 @@ const Sector_Metric_graph = ({ input, metric }) => {
     })
 
     return (
-        <div className="GraphWrapper" style={{ position: "relative", width: "200vw", height: "60vh" }}>
-            <canvas ref={chartRef} />
-        </div>
+        <canvas ref={chartRef} />
     )
 }
 
-export default Sector_Metric_graph
+export default Sector_Metric_linegraph

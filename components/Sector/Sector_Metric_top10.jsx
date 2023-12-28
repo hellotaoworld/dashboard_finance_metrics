@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sector_Metric_top10 = () => {
     return (
-        <div>Sector_Metric_top10</div>
+        <div>Top 10 this year</div>
     )
 }
 

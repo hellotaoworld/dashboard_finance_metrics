@@ -1,82 +1,68 @@
 import React, { useState, useEffect } from 'react'
-import Sector_Metric_graph from './Sector_Metric_graph';
+import Sector_Metric_graphcard from './Sector_Metric_graphcard';
+import Sector_Metric_detailtable from './Sector_Metric_detailtable';
 
 const SectorComponent = ({ sectors }) => {
     const [sectorSelected, setsectorSelected] = useState(sectors[0].company_sector);
     const [sectorDetails, setsectorDetails] = useState([]);
+    const metricDetails = [];
+
     useEffect(() => {
         //console.log(sectorSelected);
         fetch(`/api/sectors/${sectorSelected}`)
             .then(res => res.json())
             .then(value => {
-                //console.log(value)
-                setsectorDetails(value)
+                setsectorDetails(value);
             })
-
     }, [sectorSelected])
 
-    //const report_year = sectorDetails.map(item => [item.report_year: item.report_year]);
-    const avg_revenue_grwoth = sectorDetails.reduce((accumulator, item) => {
-        accumulator[item.report_year] = item.avg_revenue_grwoth;
-        return accumulator;
-    }, {});
 
-    const avg_return_on_invested_capital_rate = sectorDetails.reduce((accumulator, item) => {
-        accumulator[item.report_year] = item.avg_return_on_invested_capital_rate;
-        return accumulator;
-    }, {});
+    metricDetails.push(
+        sectorDetails.reduce((accumulator, item) => {
+            accumulator[item.report_year] = item.avg_revenue_grwoth;
+            return accumulator;
+        }, {})
+    );
 
-    const avg_eps_growth_rate = sectorDetails.reduce((accumulator, item) => {
-        accumulator[item.report_year] = item.avg_eps_growth_rate;
-        return accumulator;
-    }, {});
+    metricDetails.push(
+        sectorDetails.reduce((accumulator, item) => {
+            accumulator[item.report_year] = item.avg_return_on_invested_capital_rate;
+            return accumulator;
+        }, {})
+    );
 
-    const avg_adj_equity_growth_rate = sectorDetails.reduce((accumulator, item) => {
-        accumulator[item.report_year] = item.avg_adj_equity_growth_rate;
-        return accumulator;
-    }, {});
-    //console.log(report_year)
+    metricDetails.push(
+        sectorDetails.reduce((accumulator, item) => {
+            accumulator[item.report_year] = item.avg_eps_growth_rate;
+            return accumulator;
+        }, {})
+    );
+
+    metricDetails.push(
+        sectorDetails.reduce((accumulator, item) => {
+            accumulator[item.report_year] = item.avg_adj_equity_growth_rate;
+            return accumulator;
+        }, {})
+    );
+
+    //console.log(metricDetails);
 
     return (
-        <div>
-
+        <div className='grid grid-rows-subgrid gap-4 row-span-3'>
             <select value={sectorSelected} onChange={(e) => { setsectorSelected(e.target.value) }}>
                 {sectors.map((sector, i) => (<option key={i} value={sector.company_sector}>{sector.company_sector}</option>))}
             </select>
+            <div className="grid grid-cols-2 grid-flow-col gap-4">
+                <Sector_Metric_graphcard input={metricDetails[0]} metric={"Revenue Growth"}></Sector_Metric_graphcard>
+                <Sector_Metric_graphcard input={metricDetails[1]} metric={"Return on Invested Capital"}></Sector_Metric_graphcard>
+            </div>
+            <div className="grid grid-cols-2 grid-flow-col gap-4">
+                <Sector_Metric_graphcard input={metricDetails[2]} metric={"EPS Growth"}></Sector_Metric_graphcard>
+                <Sector_Metric_graphcard input={metricDetails[3]} metric={"Adjusted Equity Growth"}></Sector_Metric_graphcard>
+            </div>
+            <Sector_Metric_detailtable sectorDetails={sectorDetails}></Sector_Metric_detailtable>
+        </div>
 
-
-            <div><Sector_Metric_graph input={avg_revenue_grwoth}></Sector_Metric_graph></div>
-            <div><Sector_Metric_graph input={avg_return_on_invested_capital_rate}></Sector_Metric_graph></div>
-            <div><Sector_Metric_graph input={avg_eps_growth_rate}></Sector_Metric_graph></div>
-            <div><Sector_Metric_graph input={avg_adj_equity_growth_rate}></Sector_Metric_graph></div>
-
-
-            <br></br>
-            <table className="table-auto border-collapse">
-                <thead>
-                    <tr>
-                        <th>Report Year</th>
-                        <th>Company Count</th>
-                        <th>AVG Revenue Growth</th>
-                        <th>AVG Return on Invested Capital</th>
-                        <th>AVG EPS Growth</th>
-                        <th>AVG Adjusted Equity Growth</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sectorDetails.map((value, i) => (
-                        <tr key={i}>
-                            <td>{value.report_year}</td>
-                            <td>{value.count_company}</td>
-                            <td>{value.avg_revenue_grwoth}</td>
-                            <td>{value.avg_return_on_invested_capital_rate}</td>
-                            <td>{value.avg_eps_growth_rate}</td>
-                            <td>{value.avg_adj_equity_growth_rate}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div >
     )
 
 }

@@ -18,3 +18,6 @@ AND
 m.`a.report_period`='FY'
 GROUP BY c.company_sector, m.`a.report_year`
 ;
+
+-- List of companies for selected metrics --
+
