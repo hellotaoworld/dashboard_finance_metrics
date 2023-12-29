@@ -23,7 +23,7 @@ table {
 .layout {
   display: flex;
   height: 100vh;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 
@@ -34,7 +34,6 @@ table {
 .sidebar {
   width: 17rem;
   height: 100%;
-  background-color: #e0dfff;
   padding: 1rem;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -58,7 +57,6 @@ table {
   gap: 1rem;
   padding-top: 1rem;
   margin-top: 1rem;
-  border-top: 1px solid #e5e7eb;
 }
 
 
@@ -79,26 +77,12 @@ table {
   list-style: none;
 }
 
-.sidebar_link_selected {
+.sidebar_link {
   display: inline-block;
   font-size: 1rem;
   text-decoration: none;
-  color: #000;
   padding: 0.8rem 1rem;
   display: flex;
-  background-color: #7da6f8;
-  margin-bottom: 1rem;
-  border-radius: 0.8rem;
-}
-
-.sidebar_link_default {
-  display: inline-block;
-  font-size: 1rem;
-  text-decoration: none;
-  color: #000;
-  padding: 0.8rem 1rem;
-  display: flex;
-  background-color: #f3f4f6;
   margin-bottom: 1rem;
   border-radius: 0.8rem;
 }
@@ -117,10 +101,8 @@ table {
   right: 0;
   top: 4.7rem;
   border: none;
-  background-color: #fff;
   width: 1.5rem;
   height: 1.5rem;
-  border: 1px solid #e5e7eb;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -133,10 +115,8 @@ table {
 .theme_btn {
 
   border: none;
-  background-color: #fff;
   width: 1.8rem;
   height: 1.8rem;
-  border: 1px solid #e5e7eb;
   border-radius: 50%;
   display: flex;
   justify-content: center;
