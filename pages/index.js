@@ -6,12 +6,9 @@ import SectorPage from './sector'
 export default function Home({ sectors }) {
   return (
     <main>
-      <div className='container mx-auto px-10 mb-8'>
-        <Head><title>Valuation Engine Dashboard</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-      </div>
+      <Head><title>Valuation Engine Dashboard</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
     </main>
   )

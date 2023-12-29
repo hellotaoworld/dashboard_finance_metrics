@@ -46,6 +46,7 @@ const Sidebar = () => {
                             <span className='sidebar_name'>Company Profile</span>
                         </Link>
                     </li>
+
                 </ul>
 
                 <div className='sidebar_menu'>
