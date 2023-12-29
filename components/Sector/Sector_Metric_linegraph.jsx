@@ -1,6 +1,5 @@
 import { Chart } from "chart.js/auto"
 import React, { useRef, useEffect } from 'react'
-import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 
 const Sector_Metric_linegraph = ({ input, metric }) => {
     const chartRef = useRef(null)

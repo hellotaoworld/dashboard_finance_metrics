@@ -1,9 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { getSectors } from '../services'
-import { SectorComponent } from '@/components'
-
-
+import SectorPage from './sector'
 
 export default function Home({ sectors }) {
   return (
@@ -12,7 +10,6 @@ export default function Home({ sectors }) {
         <Head><title>Valuation Engine Dashboard</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <SectorComponent sectors={sectors}></SectorComponent>
 
       </div>
 

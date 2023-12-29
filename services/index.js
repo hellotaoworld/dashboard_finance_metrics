@@ -22,3 +22,11 @@ export const getSectorDetails = async (v_sector) => {
     //console.log(result[0])
     return result[0]
 }
+
+export const getCompanies = async () => {
+
+    const query = 'SELECT distinct company_name FROM valuation_engine_mapping_company'
+    const result = await connection.execute(query)
+    //console.log(result[0])
+    return result[0]
+}
