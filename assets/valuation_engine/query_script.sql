@@ -19,5 +19,20 @@ m.`a.report_period`='FY'
 GROUP BY c.company_sector, m.`a.report_year`
 ;
 
+-- sector overview --
+SELECT 
+c.company_sector as sector, 
+min(m.`a.report_year`) as report_year_min, 
+max(m.`a.report_year`) as report_year_max, 
+count(distinct c.company_name) as count_company 
+FROM valuation_engine_metrics m 
+INNER JOIN valuation_engine_mapping_company c 
+on m.`a.company_name` = c.company_name 
+WHERE c.company_sector ="Semiconductor" AND 
+m.`a.report_period` ="FY" 
+GROUP BY c.company_sector; 
+
+
 -- List of companies for selected metrics --
+
 

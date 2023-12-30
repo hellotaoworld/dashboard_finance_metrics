@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { getSectors } from '../services'
-import SectorPage from './sector'
 
 export default function Home({ sectors }) {
   return (

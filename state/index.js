@@ -1,7 +1,8 @@
 import { createGlobalState } from "react-hooks-global-state";
 const { setGlobalState, useGlobalState } = createGlobalState({
     Sector: '',
-    Company: ''
+    Company: '',
+    Tab: 0
 });
 
 export { useGlobalState, setGlobalState }

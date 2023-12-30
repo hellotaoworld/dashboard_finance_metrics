@@ -8,7 +8,7 @@ const Sector_Metric_graphcard = ({ input, metric }) => {
     return (
         <Card>
             <CardHeader>
-                {metric}
+                <div className='font-medium '>{metric}</div>
             </CardHeader>
             <CardBody>
                 <div className='grid grid-cols-3 gap-2'>
