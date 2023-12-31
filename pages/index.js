@@ -1,7 +1,6 @@
 import Head from 'next/head'
-import { getSectors } from '../services'
 
-export default function Home({ sectors }) {
+export default function Home() {
   return (
     <main>
       <Head><title>Valuation Engine Dashboard</title>
