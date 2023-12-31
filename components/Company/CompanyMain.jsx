@@ -7,7 +7,7 @@ const CompanyMain = ({ sector, company }) => {
     const [companyOverview, setcompanyOverview] = useState([]);
     const [companyDetails, setcompanyDetails] = useState([]);
     const [metricDetails, setmetricDetails] = useState([]);
-    const [metricList, setmetricList] = useState([]);
+    const [sectormetricList, setsectormetricList] = useState([]);
     const [sectorDetails, setsectorDetails] = useState([]);
 
     useEffect(() => {
@@ -34,13 +34,14 @@ const CompanyMain = ({ sector, company }) => {
             })
     }, [company])
 
+
     useEffect(() => {
-        fetch(`/api/companies/metriclist/${company}`)
+        fetch(`/api/sectors/metriclist/${sector}`)
             .then(res => res.json())
             .then(value => {
-                setmetricList(value);
+                setsectormetricList(value);
             })
-    }, [company])
+    }, [sector])
 
     useEffect(() => {
         //console.log(sectorSelected);
@@ -70,10 +71,10 @@ const CompanyMain = ({ sector, company }) => {
 
                     <div className='grid grid-flow-col col-span-3 gap-4'>
                         <Company_Metric_group
-                            metricList={metricList}
                             metricDetails={metricDetails}
                             companyDetails={companyDetails}
-                            sectorDetails={sectorDetails}></Company_Metric_group>
+                            sectorDetails={sectorDetails}
+                            sectormetricList={sectormetricList}></Company_Metric_group>
                     </div>
                 </div>
                 <div className='grid grid-flow-col gap-4'>

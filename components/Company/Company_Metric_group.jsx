@@ -2,26 +2,35 @@ import React from 'react'
 import Company_Metric_graphcard from './Company_Metric_graphcard'
 import { Tabs, Tab } from '@nextui-org/react';
 
-const Company_Metric_group = ({ metricList, metricDetails, companyDetails, sectorDetails }) => {
-    const metricGroup = [...new Set(metricList.map(metricList => metricList.formula_category))]
-    const metricFieldName = [...new Set(metricList.map(metricList => metricList.formula_shortname))]
-    //const metricName = [...new Set(metricList.map(metricList => metricList.formula_name))]
+const Company_Metric_group = ({ metricDetails, companyDetails, sectorDetails, sectormetricList }) => {
+    const metricGroup = [...new Set(sectormetricList.map(metricList => metricList.formula_category))]
+    const sectormetricFieldName = [...new Set(sectormetricList.map(sectormetricList => sectormetricList.formula_shortname))]
 
     const metricData = [];
-    metricFieldName.forEach(metric => {
+    sectormetricFieldName.forEach(metric => {
         const metricDataEntry = metricDetails.filter(metricDetails => metricDetails.metric_name == metric).reduce((accumulator, item) => {
             accumulator[item.report_year] = item.metric_value;  // Assuming you want to use dynamic metric
             return accumulator;
         }, {});
 
-        metricData.push({
-            key: [metric],
-            data: metricDataEntry
-        });
+        const sectormetricArray = sectorDetails.filter(sectorDetails => sectorDetails.metric_name == metric).reduce((accumulator, item) => {
+            accumulator[item.report_year] = null;  // Assuming you want to use dynamic metric
+            return accumulator;
+        }, {});
+        Object.keys(metricDataEntry).length > 1 ?
+            metricData.push({
+                key: [metric],
+                data: metricDataEntry
+            })
+            : metricData.push({
+                key: [metric],
+                data: sectormetricArray
+            })
     });
 
+
     const sectormetricData = [];
-    metricFieldName.forEach(metric => {
+    sectormetricFieldName.forEach(metric => {
         const metricDataEntry = sectorDetails.filter(sectorDetails => sectorDetails.metric_name == metric).reduce((accumulator, item) => {
             accumulator[item.report_year] = item.avg;  // Assuming you want to use dynamic metric
             return accumulator;
@@ -33,8 +42,6 @@ const Company_Metric_group = ({ metricList, metricDetails, companyDetails, secto
         });
     });
 
-    //console.log(metricData);
-    //console.log(sectormetricData);
     const company_name = companyDetails.length > 0 ? companyDetails[0]["a.company_name"] : null
 
     return (
@@ -43,7 +50,7 @@ const Company_Metric_group = ({ metricList, metricDetails, companyDetails, secto
                 {metricGroup.map((group, i) => (
                     <Tab key={i} title={group}>
                         <div className="gap-3 grid grid-cols-1 sm:grid-cols-2">
-                            {metricList.filter(metricItem => metricItem.formula_category === group)
+                            {sectormetricList.filter(metricItem => metricItem.formula_category === group)
                                 .map((item, index) => (
                                     <div key={index}>
                                         <Company_Metric_graphcard
