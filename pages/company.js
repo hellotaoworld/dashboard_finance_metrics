@@ -5,6 +5,7 @@ import { useGlobalState } from '@/state';
 import { CompanyMain } from '@/components';
 
 const CompanyPage = ({ sectors }) => {
+    const sectorSelected = useGlobalState('Sector')[0];
     const companySelected = useGlobalState('Company')[0];
 
     return (
@@ -14,7 +15,7 @@ const CompanyPage = ({ sectors }) => {
                 <Filter sectors={sectors}></Filter>
             </div>
             <div>
-                <CompanyMain company={companySelected}></CompanyMain>
+                <CompanyMain sector={sectorSelected} company={companySelected}></CompanyMain>
             </div>
         </div >
 
@@ -26,7 +27,6 @@ export default CompanyPage
 
 export async function getServerSideProps() {
     const sectors = (await getSectors()) || [];
-    //const companies = (await getCompanies()) || [];
 
     return {
         props: { sectors }

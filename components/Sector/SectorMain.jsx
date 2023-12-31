@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Sector_Metric_detailtable from './Sector_Metric_detailtable';
-import Sector_Metric_graphcard from './Sector_Metric_graphcard';
 import Sector_Intro from './Sector_Intro';
 import Sector_Metric_group from './Sector_Metric_group';
+import Sector_Metric_detailtable from './Sector_Metric_detailtable';
 
 const SectorMain = ({ sector }) => {
     const [sectorDetails, setsectorDetails] = useState([]);

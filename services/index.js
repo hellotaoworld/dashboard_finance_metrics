@@ -72,7 +72,10 @@ export const getMetricDetails = async (v_sector) => {
 
 export const getCompanyDetails = async (v_company) => {
 
-    const query = 'SELECT r.`a.company_name` as "company_name",r.`a.report_year` as "report_year",r.metric_value,r.metric_ranking,f.formula_category,c.company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortnameleft join valuation_engine_mapping_company con r.`a.company_name` = c.company_name where c.company_name=?;'
+    const query = "SELECT *,\
+    date_format(`a.report_end_date`, '%Y-%m-%d') as report_date \
+    FROM valuation_engine_input i\
+    where i.`a.company_name` =?;"
 
     const result = await connection.execute(query, [v_company])
     //console.log(result[0])
@@ -82,6 +85,24 @@ export const getCompanyDetails = async (v_company) => {
 export const getCompanyOverview = async (v_company) => {
 
     const query = 'SELECT r.`a.company_name` as "company_name",min(r.`a.report_year`) as "report_year_min", max(r.`a.report_year`) as "report_year_max", c.company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.`a.company_name`=c.company_name where r.`a.company_name`=? GROUP BY c.company_sector,r.`a.company_name`;'
+    const result = await connection.execute(query, [v_company])
+    //console.log(result[0])
+    return result[0]
+}
+
+export const getCompanyMetricList = async (v_company) => {
+
+    const query = 'SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category FROM valuation_engine_metrics_ranking r inner join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname inner join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_name=?;'
+
+    const result = await connection.execute(query, [v_company])
+    //console.log(result[0])
+    return result[0]
+}
+
+export const getCompanyMetricDetails = async (v_company) => {
+
+    const query = 'SELECT r.`a.company_name` as "company_name",r.`a.report_year` as "report_year",r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,c.company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname left join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_name=?;'
+
     const result = await connection.execute(query, [v_company])
     //console.log(result[0])
     return result[0]

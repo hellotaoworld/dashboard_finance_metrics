@@ -12,10 +12,3 @@ export default function Home({ sectors }) {
   )
 }
 
-export async function getServerSideProps() {
-  const sectors = (await getSectors()) || [];
-
-  return {
-    props: { sectors }
-  }
-}

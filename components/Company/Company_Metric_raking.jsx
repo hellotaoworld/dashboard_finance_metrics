@@ -1,11 +1,11 @@
 import { Table, TableBody, TableCell, TableColumn, TableRow } from '@nextui-org/react';
 import React, { useState } from 'react'
 
-const Sector_Metric_top10 = ({ rank }) => {
-    const currentYear = new Date().getFullYear();
+const Company_Metric_ranking = ({ rank, sectorinput }) => {
+    //const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(rank.map(rank => rank.report_year))]
     const defaultyear = Math.max(...yearlist);
-    const [year, setYear] = useState(currentYear);
+    const [year, setYear] = useState(defaultyear);
 
     return (
         <div
@@ -16,14 +16,14 @@ const Sector_Metric_top10 = ({ rank }) => {
                         {yearlist.map((y, i) => (
                             <option key={i}>{y}</option>
                         ))}
-                    </select> Top 5</p>
+                    </select></p>
             </div>
             <table className='px-2'>
                 <tbody>
                     {rank.filter(rank => rank.report_year == year).sort((a, b) => b.metric_value - a.metric_value).slice(0, 5).map((rank, i) => (
                         <tr key={i} className="w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50">
-                            <td className='text-sm px-2' width={150}>{rank.company_name}</td>
-                            <td className='font-light text-sm float-right'>{Math.round(rank.metric_value * 100) + "%"}</td>
+                            <td className='text-sm px-2' width={150}></td>
+                            <td className='font-light text-sm float-right'></td>
                         </tr>
                     ))}
                 </tbody>
@@ -33,4 +33,4 @@ const Sector_Metric_top10 = ({ rank }) => {
     )
 }
 
-export default Sector_Metric_top10
+export default Company_Metric_ranking
