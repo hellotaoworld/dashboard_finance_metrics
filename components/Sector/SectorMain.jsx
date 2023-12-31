@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import Sector_Metric_detailtable from './Sector_Metric_detailtable';
 import Sector_Metric_graphcard from './Sector_Metric_graphcard';
 import Sector_Intro from './Sector_Intro';
+import Sector_Metric_group from './Sector_Metric_group';
 
 const SectorMain = ({ sector }) => {
     const [sectorDetails, setsectorDetails] = useState([]);
     const [sectorOverview, setsectorOverview] = useState([]);
-    const metricDetails = [];
+    const [metricDetails, setmetricDetails] = useState([]);
+    const [metricList, setmetricList] = useState([]);
 
     useEffect(() => {
         //console.log(sectorSelected);
@@ -25,52 +27,29 @@ const SectorMain = ({ sector }) => {
             })
     }, [sector])
 
-    metricDetails.push(
-        sectorDetails.reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.avg_revenue_grwoth;
-            return accumulator;
-        }, {})
-    );
+    useEffect(() => {
+        fetch(`/api/sectors/metrics/${sector}`)
+            .then(res => res.json())
+            .then(value => {
+                setmetricDetails(value);
+            })
+    }, [sector])
 
-    metricDetails.push(
-        sectorDetails.reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.avg_return_on_invested_capital_rate;
-            return accumulator;
-        }, {})
-    );
+    useEffect(() => {
+        fetch(`/api/sectors/metriclist/${sector}`)
+            .then(res => res.json())
+            .then(value => {
+                setmetricList(value);
+            })
+    }, [sector])
 
-    metricDetails.push(
-        sectorDetails.reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.avg_eps_growth_rate;
-            return accumulator;
-        }, {})
-    );
-
-    metricDetails.push(
-        sectorDetails.reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.avg_adj_equity_growth_rate;
-            return accumulator;
-        }, {})
-    );
     return (
         <div>
+            <Sector_Intro sector={sector} sectorOverview={sectorOverview}></Sector_Intro>
+            <Sector_Metric_group metricList={metricList} metricDetails={metricDetails} sectorDetails={sectorDetails}>
+            </Sector_Metric_group>
+            {/*<Sector_Metric_detailtable metricList={metricList} sectorDetails={sectorDetails}></Sector_Metric_detailtable> */}
 
-            <div className='grid grid-rows-subgrid gap-4 row-span-4'>
-                <div className="grid grid-flow-col gap-4">
-                    <Sector_Intro sector={sector} sectorOverview={sectorOverview}></Sector_Intro>
-                </div>
-                <div className="grid grid-cols-2 grid-flow-col gap-4">
-                    <Sector_Metric_graphcard input={metricDetails[0]} metric={"Revenue Growth"}></Sector_Metric_graphcard>
-                    <Sector_Metric_graphcard input={metricDetails[1]} metric={"Return on Invested Capital"}>
-                    </Sector_Metric_graphcard>
-                </div>
-                <div className="grid grid-cols-2 grid-flow-col gap-4">
-                    <Sector_Metric_graphcard input={metricDetails[2]} metric={"EPS Growth"}></Sector_Metric_graphcard>
-                    <Sector_Metric_graphcard input={metricDetails[3]} metric={"Adjusted Equity Growth"}>
-                    </Sector_Metric_graphcard>
-                </div>
-                <Sector_Metric_detailtable sectorDetails={sectorDetails}></Sector_Metric_detailtable>
-            </div>
         </div>
     )
 }
