@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Company_Intro from './Company_Intro'
-import Company_Statement from './Company_Statement';
+import Company_Stats_card from './Company_Stats_card';
 import Company_Metric_group from './Company_Metric_group';
 
 const CompanyMain = ({ sector, company }) => {
@@ -77,8 +77,8 @@ const CompanyMain = ({ sector, company }) => {
                             sectormetricList={sectormetricList}></Company_Metric_group>
                     </div>
                 </div>
-                <div className='grid grid-flow-col gap-4'>
-                    <Company_Statement input={companyDetails}></Company_Statement>
+                <div className='grid grid-flow-col gap-4 mb-4'>
+                    <Company_Stats_card input={companyDetails}></Company_Stats_card>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ const Sidebar = () => {
     const tabSelected = useGlobalState('Tab')[0];
     const [SelectedSidebar, setSelectedSidebar] = useState(tabSelected);
     //setSelectedSidebar('Tab', useGlobalState('Tab')[0]);
-    console.log(tabSelected)
+    //console.log(tabSelected)
 
     return (
         <div className='sidebar_wrapper'>
