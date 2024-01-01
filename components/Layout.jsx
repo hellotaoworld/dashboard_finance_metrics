@@ -10,6 +10,7 @@ const Layout = ({ children }) => {
         const mapping = { '/': 0, '/sector': 1, '/company': 2 }
         setGlobalState('Tab', mapping[path])
     }, []);
+    //console.log('render layout')
     return (
         <>
 

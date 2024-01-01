@@ -11,7 +11,7 @@ const CompanyMain = ({ sector, company }) => {
     const [sectorDetails, setsectorDetails] = useState([]);
 
     useEffect(() => {
-        fetch(`/api/companies/overview/${company}`)
+        fetch(`/api/companies/overview/${encodeURIComponent(company)}`)
             .then(res => res.json())
             .then(value => {
                 setcompanyOverview(value[0]);
@@ -19,7 +19,7 @@ const CompanyMain = ({ sector, company }) => {
     }, [company])
 
     useEffect(() => {
-        fetch(`/api/companies/details/${company}`)
+        fetch(`/api/companies/details/${encodeURIComponent(company)}`)
             .then(res => res.json())
             .then(value => {
                 setcompanyDetails(value);
@@ -27,7 +27,7 @@ const CompanyMain = ({ sector, company }) => {
     }, [company])
 
     useEffect(() => {
-        fetch(`/api/companies/metrics/${company}`)
+        fetch(`/api/companies/metrics/${encodeURIComponent(company)}`)
             .then(res => res.json())
             .then(value => {
                 setmetricDetails(value);

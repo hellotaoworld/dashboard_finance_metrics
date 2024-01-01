@@ -5,7 +5,8 @@ const Company_Stats_statement = ({ input }) => {
     //const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(input.map(input => input["a.report_year"]))]
     const defaultyear = Math.max(...yearlist);
-    const [year, setYear] = useState(defaultyear);
+    const [innerYear, setYear] = useState();
+    const year = innerYear ?? defaultyear;
 
     const statement = input.filter(input => input["a.report_year"] == year)
     //console.log(input.filter(input => input["a.report_year"] == year))

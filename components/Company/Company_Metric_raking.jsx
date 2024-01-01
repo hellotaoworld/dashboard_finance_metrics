@@ -2,10 +2,13 @@ import { Table, TableBody, TableCell, TableColumn, TableRow } from '@nextui-org/
 import React, { useState } from 'react'
 
 const Company_Metric_ranking = ({ rank, sectorinput }) => {
-    //const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(rank.map(rank => rank.report_year))]
     const defaultyear = Math.max(...yearlist);
-    const [year, setYear] = useState(defaultyear);
+    //console.log(defaultyear)
+    const [innerYear, setYear] = useState();
+    const year = innerYear ?? defaultyear;
+
 
     return (
         <div
