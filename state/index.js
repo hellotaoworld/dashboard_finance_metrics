@@ -1,6 +1,6 @@
 import { createGlobalState } from "react-hooks-global-state";
 const { setGlobalState, useGlobalState } = createGlobalState({
-    Sector: '',
+    Sector: 'Semiconductor',
     Company: '',
     Tab: 0
 });
