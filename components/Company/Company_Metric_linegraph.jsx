@@ -57,12 +57,11 @@ const Company_Metric_linegraph = ({ input, sectorinput, companyname }) => {
                     }
                     ,
                     y: {
-                        suggestedMin: -1,
-                        suggestedMax: 1,
+
                         ticks: {
                             color: lineColor,
                             format: {
-                                style: 'percent',
+
                                 maximumSignificantDigits: 2
 
                             },

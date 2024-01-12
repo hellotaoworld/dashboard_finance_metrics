@@ -14,7 +14,7 @@ const Sector_Metric_graphcard = ({ input, metric, rank }) => {
             </CardHeader>
             <CardBody>
                 <div className='grid grid-cols-3 gap-2'>
-                    <div className='col-span-2'><Sector_Metric_linegraph input={input}></Sector_Metric_linegraph></div>
+                    <div className='col-span-2'><Sector_Metric_linegraph input={input} type={metric[2]}></Sector_Metric_linegraph></div>
                     <div><Sector_Metric_top10 rank={rank}></Sector_Metric_top10></div>
                 </div>
             </CardBody>

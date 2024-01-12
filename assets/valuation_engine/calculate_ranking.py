@@ -62,7 +62,14 @@ def run():
     #formula_names = mapping_formula_df.iloc[:, 4].tolist()
 
     def calculate_ranking(metric_v):
-        data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year`,{metric_v} DESC"
+        direction_query =f"SELECT formula_direction from valuation_engine_mapping_formula where formula_shortname='{metric_v}'"
+        d_df = pd.read_sql(direction_query, connection)
+        direction= d_df["formula_direction"][0]
+        
+        if direction=='positive':
+            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by {metric_v} DESC"
+        else:
+            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by {metric_v} ASC"
         q_df = pd.read_sql(data_query, connection)
         ranking_df = q_df[['a.company_name','a.report_year', 'metric_value']]
         ranking_df['metric_name']=metric_v
@@ -72,11 +79,12 @@ def run():
         # calculate ranking per year
         for year in year_df['year']:
             temp_df =ranking_df[ranking_df['a.report_year']==year]
+            temp_df.reset_index()
             i = 1
             for index, row in temp_df.iterrows():
-                if index==0 or ranking_df["a.report_year"][index]!=ranking_df["a.report_year"][index-1]:
+                if i == 1:
                     ranking_df.loc[index,'metric_ranking'] = 1
-                elif ranking_df["metric_value"][index] == ranking_df["metric_value"][index-1] and ranking_df["a.report_year"][index]==ranking_df["a.report_year"][index-1]:
+                elif ranking_df["   metric_value"][i] == ranking_df["metric_value"][i-1] and ranking_df["a.report_year"][index]==ranking_df["a.report_year"][index-1]:
                     ranking_df.loc[index,'metric_ranking'] = i
                 else:
                     i = i + 1
@@ -109,3 +117,5 @@ def run():
     # Close the cursor and connection
     cursor.close()
     connection.close()
+
+run()

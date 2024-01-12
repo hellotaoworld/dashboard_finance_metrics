@@ -78,7 +78,7 @@ const CompanyMain = ({ sector, company }) => {
                     </div>
                 </div>
                 <div className='grid grid-flow-col gap-4 mb-4'>
-                    <Company_Stats_card input={companyDetails}></Company_Stats_card>
+                    <Company_Stats_card input={companyDetails} overview={companyOverview}></Company_Stats_card>
                 </div>
             </div>
         </div>

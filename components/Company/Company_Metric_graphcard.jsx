@@ -18,7 +18,7 @@ const Company_Metric_graphcard = ({ input, sectorinput, metric, rank }) => {
                         <Company_Metric_linegraph
                             input={input} sectorinput={sectorinput} companyname={metric[2]}>
                         </Company_Metric_linegraph></div>
-                    <div><Company_Metric_ranking rank={rank} sectorinput={sectorinput}></Company_Metric_ranking></div>
+                    <div><Company_Metric_ranking rank={rank}></Company_Metric_ranking></div>
                 </div>
             </CardBody>
         </Card>

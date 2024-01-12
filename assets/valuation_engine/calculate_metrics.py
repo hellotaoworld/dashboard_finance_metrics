@@ -75,7 +75,8 @@ def run():
         
         # Replace inf and -inf values with NULL
         ratio_df = ratio_df.replace([np.inf, -np.inf], np.nan)
-        #print(ratio_df)
+        #print(company_v)
+        #print(ratio_df['days_inventory_on_hand'])
         
         # Load into database 
         for _, row in ratio_df.iterrows():
@@ -85,7 +86,8 @@ def run():
             #print(values)
             cursor.execute(insert_query, values)
         connection.commit()
-        print(f"Ratio updated successfully for {company_v}.")    
+        print(f"Ratio updated successfully for {company_v}.")   
+         
 
     # Refresh the ratio table with loop calculation for the list of companies
     company_query =f"SELECT distinct `a.company_name` FROM {input_table_name}"
@@ -104,3 +106,4 @@ def run():
     # Close the cursor and connection
     cursor.close()
     connection.close()
+

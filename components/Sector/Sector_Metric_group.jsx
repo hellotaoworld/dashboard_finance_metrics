@@ -34,7 +34,7 @@ const Sector_Metric_group = ({ metricList, metricDetails, sectorDetails }) => {
                                     <div key={index}>
                                         <Sector_Metric_graphcard
                                             input={metricData.filter(metricData => metricData.key == item.formula_shortname)[0].data}
-                                            metric={[item.formula_name, item.formula_pseudo_code]}
+                                            metric={[item.formula_name, item.formula_pseudo_code, item.formula_type]}
                                             rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}>
                                         </Sector_Metric_graphcard>
                                     </div>

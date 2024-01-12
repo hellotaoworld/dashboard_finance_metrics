@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react'
 
-const Company_Stats_realtime = ({ company }) => {
+const Company_Stats_realtime = ({ overview }) => {
     const [tickerDetails, setTickerDetails] = useState([])
 
-    const ticker = 'AMD'
+    const ticker = overview.company_ticker
+    //const ticker = 'AMD'
+    /*
     useEffect(() => {
         fetch(`/api/alphavantage/${ticker}`)
             .then(res => res.json())
             .then(value => {
-                setTickerDetails(value['Time Series (5min)']);
+                setTickerDetails(value);
             })
 
     }, [ticker])
-
+    */
 
     //console.log(tickerDetails)
 
     return (
-        <div>Company_Stats_realtime</div>
+        <div></div>
     )
 }
 

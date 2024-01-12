@@ -2,12 +2,14 @@ import { Chart } from "chart.js/auto"
 import React, { useRef, useEffect } from 'react'
 import { useTheme } from "next-themes"
 
-const Sector_Metric_linegraph = ({ input, metric }) => {
+const Sector_Metric_linegraph = ({ input, type }) => {
     const chartRef = useRef(null)
 
     const { theme, setTheme } = useTheme()
     const lineColor = theme == 'light' ? "darkblue" : "lightblue";
     const gridColor = theme == 'light' ? "#F4F4F5" : "#27272A";
+
+
 
     useEffect(() => {
         // destroy the chart if already eixsts
@@ -47,12 +49,11 @@ const Sector_Metric_linegraph = ({ input, metric }) => {
                     }
                     ,
                     y: {
-                        suggestedMin: -1,
-                        suggestedMax: 1,
+
                         ticks: {
                             color: lineColor,
                             format: {
-                                style: 'percent',
+
                                 maximumSignificantDigits: 2
 
                             },

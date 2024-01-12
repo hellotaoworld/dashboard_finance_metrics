@@ -8,7 +8,7 @@ export default async function alphavantage(req, res) {
         //const { company } = req.query  //const sector = req.query.sector
         //const result = await getCompanyDetails(company)
         const { ticker } = req.query
-        const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=5min&apikey=${process.env.ALPHAVANTAGE_API}`
+        const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_API}`
 
         const result = await fetch(url);
         const result_json = await result.json();
