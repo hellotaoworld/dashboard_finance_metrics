@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
     "@react-stately/data": "^3.11.0",

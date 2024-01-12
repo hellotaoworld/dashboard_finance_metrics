@@ -31,7 +31,7 @@ const SectorPage = ({ sectors }) => {
                     <Filter sectors={sectors} status={1}></Filter>
                 </div>
                 <div>
-                    <SectorMain sector={sectorSelected}></SectorMain>
+
                 </div>
             </div >
         )
