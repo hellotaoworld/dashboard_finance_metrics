@@ -28,10 +28,10 @@ const CompanyPage = ({ sectors }) => {
 
             <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
                 <div>
-
+                    <Filter sectors={sectors}></Filter>
                 </div>
                 <div>
-
+                    <CompanyMain sector={sectorSelected} company={companySelected}></CompanyMain>
                 </div>
             </div >
 
