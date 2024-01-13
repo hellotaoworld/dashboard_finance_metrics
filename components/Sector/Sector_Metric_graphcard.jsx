@@ -8,9 +8,11 @@ const Sector_Metric_graphcard = ({ input, metric, rank }) => {
     return (
         <Card>
             <CardHeader>
-                <span className='font-medium '>{metric[0]}</span>
-                &nbsp;&nbsp;&nbsp;
-                <span className='italic text-xs align-bottom'>{metric[1]}</span>
+                <div className='grid grid-rows-2'>
+                    <div className='font-medium w-60'>{metric[0]}</div>
+
+                    <div className='italic text-xs align-bottom'>{metric[1]}</div>
+                </div>
             </CardHeader>
             <CardBody>
                 <div className='grid grid-cols-3 gap-2'>

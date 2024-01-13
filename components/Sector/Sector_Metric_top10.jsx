@@ -2,7 +2,7 @@ import { RadioGroup, Radio } from '@nextui-org/react';
 import React, { useState } from 'react'
 
 const Sector_Metric_top10 = ({ rank }) => {
-    const currentYear = new Date().getFullYear();
+    //const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(rank.map(rank => rank.report_year))]
     const defaultyear = Math.max(...yearlist);
     //const [year, setYear] = useState(currentYear);

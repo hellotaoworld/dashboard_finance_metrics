@@ -16,11 +16,13 @@ const Company_Stats = ({ input, ranking, metriclist }) => {
         <div className="mx-1">
             <Card>
                 <CardBody>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <div className='grid grid-cols'>
+
+
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+                        <div>
                             <Company_Stats_highlights ranking={ranking} metriclist={metriclist}></Company_Stats_highlights>
                         </div>
-                        <div className='grid grid-cols'>
+                        <div>
                             <Company_Stats_statement input={input}></Company_Stats_statement></div>
                     </div>
                 </CardBody>

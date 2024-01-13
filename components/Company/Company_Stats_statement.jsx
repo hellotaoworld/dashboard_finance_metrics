@@ -47,7 +47,6 @@ const Company_Stats_statement = ({ input }) => {
 
                 }
             </ul>
-
         </div>
     )
 }

@@ -79,14 +79,15 @@ const Company_Metric_linegraph = ({ input, sectorinput, companyname }) => {
                         display: true
                     }
                 },
-                responsive: true
+                responsive: true,
+                //maintainAspectRatio: false,
             }
         })
         chartRef.current.chart = newChart
     })
 
     return (
-        <canvas ref={chartRef} />
+        <canvas className="chart-canvas" ref={chartRef} />
     )
 }
 

@@ -5,7 +5,7 @@ import {
 
 const Sector_Metric_detailtable = ({ metricList, sectorDetails }) => {
     //console.log(metricList)
-    const [metricGroup, setmetricGroup] = useState("Key Ratio");
+    //const [metricGroup, setmetricGroup] = useState("Key Ratio");
     //console.log(metricList.filter(metricList => metricList.formula_category == metricGroup))
     return (
         <div>

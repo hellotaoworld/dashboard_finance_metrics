@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Card, CardBody } from '@nextui-org/react'
 
 const Company_Stats_highlights = ({ ranking, metriclist }) => {
     //const currentYear = new Date().getFullYear();
@@ -23,66 +24,62 @@ const Company_Stats_highlights = ({ ranking, metriclist }) => {
                     }
                 </select>
             </div>
-            <div className='my-2 grid grid-cols-2 gap-1'>
-                <div>
-                    <div className='list mx-2'>
-                        {top_stats.map((ranking, k) => (
-                            <p key={k} className='mb-2'>
-                                <p className=''>
-                                    🏆
-                                    Ranked #{ranking.metric_ranking}
-                                    <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
-                                </p>
-                                <p className='mx-7 text-default-500 text-sm'>
-                                    {ranking.metrics.split(',').map((m, i) => (
+            <div className='my-2 grid grid-cols-1 sm:grid-cols-2 gap-1'>
 
-                                        <li key={i}>
-                                            {metriclist.filter(metriclist => metriclist["formula_name"] == m).map((category, c) => (
-                                                <span key={c}>{category.formula_category}</span>
-                                            ))}
-                                            {m}</li>
-                                    ))}
-                                </p>
-
+                <div className='list mx-2'>
+                    {top_stats.map((ranking, k) => (
+                        <p key={k} className='mb-2'>
+                            <p className=''>
+                                🏆
+                                Ranked #{ranking.metric_ranking}
+                                <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
                             </p>
-                        ))
+                            <p className='mx-7 text-default-500 text-sm'>
+                                {ranking.metrics.split(',').map((m, i) => (
 
-                        }
-                    </div>
+                                    <li key={i}>
+                                        {metriclist.filter(metriclist => metriclist["formula_name"] == m).map((category, c) => (
+                                            <span key={c}>{category.formula_category}</span>
+                                        ))}
+                                        {m}</li>
+                                ))}
+                            </p>
+
+                        </p>
+                    ))
+
+                    }
                 </div>
 
-                <div>
-                    <div className='list'>
-                        {bottom_stats.map((ranking, k) => (
-                            <p key={k} className='mb-2'>
-                                <p className=''>
-                                    ⚠
-                                    Ranked #{ranking.metric_ranking}
-                                    <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
-                                </p>
-                                <p className='mx-7 text-default-500 text-sm'>
-                                    {ranking.metrics.split(',').map((m, i) => (
-
-                                        <li key={i}>
-                                            {metriclist.filter(metriclist => metriclist["formula_name"] == m).map((category, c) => (
-                                                <span key={c}>{category.formula_category}</span>
-                                            ))}
-                                            {m}</li>
-                                    ))}
-                                </p>
-
+                <div className='list mx-2'>
+                    {bottom_stats.map((ranking, k) => (
+                        <p key={k} className='mb-2'>
+                            <p className=''>
+                                ⚠
+                                Ranked #{ranking.metric_ranking}
+                                <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
                             </p>
-                        ))
+                            <p className='mx-7 text-default-500 text-sm'>
+                                {ranking.metrics.split(',').map((m, i) => (
 
-                        }
-                    </div>
+                                    <li key={i}>
+                                        {metriclist.filter(metriclist => metriclist["formula_name"] == m).map((category, c) => (
+                                            <span key={c}>{category.formula_category}</span>
+                                        ))}
+                                        {m}</li>
+                                ))}
+                            </p>
+
+                        </p>
+                    ))
+
+                    }
                 </div>
+
 
 
 
             </div>
-
-
         </div>
     )
 }

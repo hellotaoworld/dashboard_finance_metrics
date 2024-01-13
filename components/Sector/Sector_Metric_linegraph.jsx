@@ -18,6 +18,8 @@ const Sector_Metric_linegraph = ({ input, type }) => {
                 chartRef.current.chart.destroy()
             }
         }
+
+
         const context = chartRef.current.getContext("2d");
 
 
@@ -28,12 +30,13 @@ const Sector_Metric_linegraph = ({ input, type }) => {
                 labels: Object.keys(input),
                 datasets: [
                     {
-                        label: "Metric",
+                        label: "Sector Average",
                         data: Object.values(input),
                         backgroundColor: lineColor,
                         borderColor: lineColor,
                         borderWidth: 1,
                     },
+
                 ],
             },
             options: {
@@ -71,14 +74,15 @@ const Sector_Metric_linegraph = ({ input, type }) => {
                         display: false
                     }
                 },
-                responsive: true
+                responsive: true,
+                //maintainAspectRatio: false,
             }
         })
         chartRef.current.chart = newChart
     })
 
     return (
-        <canvas ref={chartRef} />
+        <canvas className="chart-canvas" ref={chartRef} />
     )
 }
 

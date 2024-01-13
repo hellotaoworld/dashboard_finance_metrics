@@ -78,8 +78,6 @@ const CompanyMain = ({ sector, company }) => {
                     <Company_Intro company={company} companyOverview={companyOverview}></Company_Intro>
                 </div>
                 <div className="grid grid-cols-3 grid-flow-col gap-4">
-
-
                     <div className='grid grid-flow-col col-span-3 gap-4'>
                         <Company_Metric_group
                             metricDetails={metricDetails}

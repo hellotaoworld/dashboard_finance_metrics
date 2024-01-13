@@ -29,7 +29,7 @@ const Filter = ({ sectors, status }) => {
             <Autocomplete className="max-w-xs"
                 label="Select a sector"
                 defaultItems={sectors}
-                defaultSelectedKey={useGlobalState("Sector")[0]} onSelectionChange={SectorHandler} onInputChange={SectorHandler}>
+                defaultSelectedKey={useGlobalState("Sector")[0]} onSelectionChange={SectorHandler} >
 
                 {sectors.map((sector, i) => (
                     <AutocompleteItem key={sector.company_sector} value={sector.company_sector}>{sector.company_sector}</AutocompleteItem>
@@ -38,7 +38,7 @@ const Filter = ({ sectors, status }) => {
             <Autocomplete className="max-w-xs"
                 label="Select a company"
                 defaultItems={companyList}
-                defaultSelectedKey={useGlobalState("Company")[0]} onSelectionChange={CompanyHandler} onInputChange={CompanyHandler}>
+                defaultSelectedKey={useGlobalState("Company")[0]} onSelectionChange={CompanyHandler}>
 
                 {companyList.map((company, i) => (
                     <AutocompleteItem key={company.company_name} value={company.company_name}>{company.company_name}</AutocompleteItem>

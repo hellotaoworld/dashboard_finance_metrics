@@ -12,6 +12,7 @@ def run():
 
     # Table variables
     metric_table_name = "valuation_engine_metrics"
+    company_table_name = "valuation_engine_mapping_company"
     metric_list =  ['revenue_growth_rate',
                     'return_on_invested_capital_rate',
                     'eps_growth_rate', 
@@ -49,6 +50,7 @@ def run():
                     'total_asset_growth_rate']
     ranking_table_name ='valuation_engine_metrics_ranking'
     ranking_table_columns =[
+        'sector',
         '`a.company_name`',
         '`a.report_year`',
         '`metric_value`',
@@ -57,8 +59,8 @@ def run():
     ]
 
     # Read metrics
-    metrics_query =f"SELECT * FROM {metric_table_name}"
-    mapping_formula_df = pd.read_sql(metrics_query, connection)
+    #metrics_query =f"SELECT * FROM {metric_table_name}"
+    #mapping_formula_df = pd.read_sql(metrics_query, connection)
     #formula_names = mapping_formula_df.iloc[:, 4].tolist()
 
     def calculate_ranking(metric_v):
@@ -67,36 +69,43 @@ def run():
         direction= d_df["formula_direction"][0]
         
         if direction=='positive':
-            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC, {metric_v} DESC"
+            data_query =f"SELECT c.company_sector as sector, `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} m LEFT JOIN {company_table_name} c on m.`a.company_name`=c.company_name WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC, {metric_v} DESC"
         else:
-            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC,  {metric_v} ASC"
+            data_query =f"SELECT c.company_sector as sector, `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} m LEFT JOIN {company_table_name} c on m.`a.company_name`=c.company_name WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC, {metric_v} ASC"
+            
         q_df = pd.read_sql(data_query, connection)
-        ranking_df = q_df[['a.company_name','a.report_year', 'metric_value']]
+        ranking_df = q_df[['sector','a.company_name','a.report_year', 'metric_value']]
         ranking_df['metric_name']=metric_v
         
         year_query =f"SELECT distinct `a.report_year` as year FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year`"
         year_df = pd.read_sql(year_query, connection)
-        # calculate ranking per year
-        for year in year_df['year']:
-            temp_df =ranking_df[ranking_df['a.report_year']==year]
-            temp_df.reset_index()
-            i = 1
-            for index, row in temp_df.iterrows():
-                if i == 1:
-                    ranking_df.loc[index,'metric_ranking'] = 1
-                    i = i + 1
-                elif ranking_df["metric_value"][index-1] == ranking_df["metric_value"][index]:
-                    ranking_df.loc[index,'metric_ranking'] = i-1
-                    #print(f"year {year}")
-                    #print(index)
-                else:
-                    ranking_df.loc[index,'metric_ranking'] = i
-                    i = i + 1
+        
+        sector_query = f"SELECT distinct company_sector as sector FROM {company_table_name}"
+        sector_df = pd.read_sql(sector_query, connection)
+        
+        
+        # calculate ranking per sector, per year
+        for sector in sector_df['sector']:
+            for year in year_df['year']:
+                temp_df =ranking_df[(ranking_df['a.report_year']==year) & (ranking_df['sector']==sector)]
+                temp_df.reset_index()
+                i = 1
+                for index, row in temp_df.iterrows():
+                    if i == 1:
+                        ranking_df.loc[index,'metric_ranking'] = 1
+                        i = i + 1
+                    elif ranking_df["metric_value"][index-1] == ranking_df["metric_value"][index]:
+                        ranking_df.loc[index,'metric_ranking'] = i-1
+                        #print(f"year {year}")
+                        #print(index)
+                    else:
+                        ranking_df.loc[index,'metric_ranking'] = i
+                        i = i + 1
                     
         #print(ranking_df)
         # Load into database 
         for _, row in ranking_df.iterrows():
-            insert_query = f"INSERT INTO {ranking_table_name} ({', '.join(ranking_table_columns)}) VALUES (%s,%s,%s,%s,%s)"
+            insert_query = f"INSERT INTO {ranking_table_name} ({', '.join(ranking_table_columns)}) VALUES (%s,%s,%s,%s,%s,%s)"
             values = tuple(row)
             #print(insert_query)
             #print(values)
@@ -110,7 +119,7 @@ def run():
     cursor.execute(truncate_ranking_query)
     print(f"Table {ranking_table_name} is truncated.")
 
-    #calculate_ranking('revenue_growth_rate')
+    #calculate_ranking('eps_growth_rate')
 
     # calculate ranking for the list of metrics
     for metric in metric_list:
@@ -121,4 +130,4 @@ def run():
     cursor.close()
     connection.close()
 
-run()
+#run()
