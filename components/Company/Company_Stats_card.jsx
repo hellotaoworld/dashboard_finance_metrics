@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Card, CardBody, ListboxItem, Listbox, CardHeader, Link } from '@nextui-org/react'
 import Company_Stats_statement from './Company_Stats_statement'
-import Company_Stats_realtime from './Company_Stats_realtime'
+import Company_Stats_highlights from './Company_Stats_highlights'
 
-const Company_Stats = ({ input, overview }) => {
+const Company_Stats = ({ input, ranking, metriclist }) => {
     //const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(input.map(input => input["a.report_year"]))]
     const defaultyear = Math.max(...yearlist);
@@ -15,12 +15,11 @@ const Company_Stats = ({ input, overview }) => {
     return (
         <div className="mx-1">
             <Card>
-                <CardHeader className='font-medium '>Detailed Stats
-                </CardHeader>
                 <CardBody>
                     <div className='grid grid-cols-2 gap-2'>
                         <div className='grid grid-cols'>
-                            <Company_Stats_realtime overview={overview}></Company_Stats_realtime></div>
+                            <Company_Stats_highlights ranking={ranking} metriclist={metriclist}></Company_Stats_highlights>
+                        </div>
                         <div className='grid grid-cols'>
                             <Company_Stats_statement input={input}></Company_Stats_statement></div>
                     </div>

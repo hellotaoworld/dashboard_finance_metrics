@@ -108,3 +108,25 @@ export const getCompanyMetricDetails = async (v_company) => {
     //console.log(result[0])
     return result[0]
 }
+
+
+export const getCompanyRanking = async (v_company) => {
+
+    const query = 'SELECT `a.report_year` as "year", \
+    metric_ranking, count(*) as "count", \
+    group_concat(concat(f.formula_name," [ ", \
+            (case when f.formula_type ="ratio" then concat(metric_value, "%") else metric_value end)," ]")) as "metrics" \
+    FROM web_application.valuation_engine_metrics_ranking r \
+    LEFT JOIN valuation_engine_mapping_formula f ON \
+    r.metric_name = f.formula_shortname \
+    where `a.company_name` =?\
+    and `a.report_year` >= 2012 \
+    and (metric_ranking <=3 or \
+        metric_ranking >=(SELECT max(metric_ranking)-3 FROM valuation_engine_metrics_ranking sub where sub.`a.report_year`=`a.report_year`))\
+    group by metric_ranking, `a.report_year`  \
+    order by year ASC, metric_ranking ASC, count DESC, metrics ASC'
+
+    const result = await connection.execute(query, [v_company])
+    //console.log(result[0])
+    return result[0]
+}

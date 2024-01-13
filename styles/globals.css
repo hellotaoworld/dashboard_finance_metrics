@@ -147,3 +147,10 @@ table {
 [data-collapse="true"] .keycontent {
   flex: none;
 }
+
+.about_img {
+  width: 40rem;
+  height: 40rem;
+  object-fit: cover;
+
+}

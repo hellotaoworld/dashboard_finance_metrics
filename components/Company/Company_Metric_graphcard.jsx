@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 import Company_Metric_linegraph from './Company_Metric_linegraph'
-import Company_Metric_ranking from './Company_Metric_raking'
+import Company_Metric_ranking from './Company_Metric_ranking'
 
 const Company_Metric_graphcard = ({ input, sectorinput, metric, rank }) => {
 

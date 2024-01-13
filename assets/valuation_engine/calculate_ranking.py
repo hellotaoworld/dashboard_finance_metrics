@@ -67,9 +67,9 @@ def run():
         direction= d_df["formula_direction"][0]
         
         if direction=='positive':
-            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by {metric_v} DESC"
+            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC, {metric_v} DESC"
         else:
-            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by {metric_v} ASC"
+            data_query =f"SELECT `a.company_name`, `a.report_year`,{metric_v} as metric_value  FROM {metric_table_name} WHERE  `a.report_period`='FY' and {metric_v} is not null order by `a.report_year` ASC,  {metric_v} ASC"
         q_df = pd.read_sql(data_query, connection)
         ranking_df = q_df[['a.company_name','a.report_year', 'metric_value']]
         ranking_df['metric_name']=metric_v
@@ -84,11 +84,14 @@ def run():
             for index, row in temp_df.iterrows():
                 if i == 1:
                     ranking_df.loc[index,'metric_ranking'] = 1
-                elif ranking_df["   metric_value"][i] == ranking_df["metric_value"][i-1] and ranking_df["a.report_year"][index]==ranking_df["a.report_year"][index-1]:
-                    ranking_df.loc[index,'metric_ranking'] = i
-                else:
                     i = i + 1
+                elif ranking_df["metric_value"][index-1] == ranking_df["metric_value"][index]:
+                    ranking_df.loc[index,'metric_ranking'] = i-1
+                    #print(f"year {year}")
+                    #print(index)
+                else:
                     ranking_df.loc[index,'metric_ranking'] = i
+                    i = i + 1
                     
         #print(ranking_df)
         # Load into database 

@@ -25,7 +25,8 @@ const Sidebar = () => {
             </button>
             <aside className='sidebar bg-default-100' data-collapse={isCollapsedSidebar}>
                 <div className='sidebar_top'>
-                    <Image className="sidebar_logo" src='/favicon.ico' width={15} height={15} alt="logo" />
+                    <img className="sidebar_logo" src='/avatar2.png' alt="logo" ></img>
+
                     <p className='sidebar_logo_name'>Valuation Engine</p>
                 </div>
                 <ul className='sidebar_list'>

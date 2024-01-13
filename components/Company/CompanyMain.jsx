@@ -9,6 +9,7 @@ const CompanyMain = ({ sector, company }) => {
     const [metricDetails, setmetricDetails] = useState([]);
     const [sectormetricList, setsectormetricList] = useState([]);
     const [sectorDetails, setsectorDetails] = useState([]);
+    const [rankingstats, setRankingstats] = useState([]);
 
     useEffect(() => {
         fetch(`/api/companies/overview/${encodeURIComponent(company)}`)
@@ -52,12 +53,22 @@ const CompanyMain = ({ sector, company }) => {
             })
     }, [sector])
 
+    useEffect(() => {
+        //console.log(sectorSelected);
+        fetch(`/api/companies/ranking/${encodeURIComponent(company)}`)
+            .then(res => res.json())
+            .then(value => {
+                setRankingstats(value);
+            })
+    }, [company])
+
+
     //console.log(company);
     //console.log(companyOverview);
     //console.log(companyDetails);
     //console.log(metricDetails);
-    //console.log(metricList);
-
+    //console.log(sectormetricList);
+    //console.log(rankingstats);
 
     return (
         <div>
@@ -78,7 +89,8 @@ const CompanyMain = ({ sector, company }) => {
                     </div>
                 </div>
                 <div className='grid grid-flow-col gap-4 mb-4'>
-                    <Company_Stats_card input={companyDetails} overview={companyOverview}></Company_Stats_card>
+                    <Company_Stats_card input={companyDetails} ranking={rankingstats} metriclist={sectormetricList}>
+                    </Company_Stats_card>
                 </div>
             </div>
         </div>
