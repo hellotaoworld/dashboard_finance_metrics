@@ -3,6 +3,8 @@ import Company_Metric_graphcard from './Company_Metric_graphcard'
 import { Tabs, Tab } from '@nextui-org/react';
 
 const Company_Metric_group = ({ metricDetails, companyDetails, sectorDetails, sectormetricList }) => {
+    //console.log(sectorDetails)
+
     const metricGroup = [...new Set(sectormetricList.map(metricList => metricList.formula_category))]
     const sectormetricFieldName = [...new Set(sectormetricList.map(sectormetricList => sectormetricList.formula_shortname))]
 
@@ -59,7 +61,8 @@ const Company_Metric_group = ({ metricDetails, companyDetails, sectorDetails, se
                                             metric={[item.formula_name,
                                             item.formula_pseudo_code,
                                                 company_name]}
-                                            rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}>
+                                            rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}
+                                            sector={sectorDetails}>
                                         </Company_Metric_graphcard>
                                     </div>
                                 ))}

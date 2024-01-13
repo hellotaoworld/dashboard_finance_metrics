@@ -1,15 +1,17 @@
 import { Table, TableBody, TableCell, TableColumn, TableRow } from '@nextui-org/react';
 import React, { useState } from 'react'
 
-const Company_Metric_ranking = ({ rank }) => {
+const Company_Metric_ranking = ({ rank, sector }) => {
     const currentYear = new Date().getFullYear();
     const yearlist = [...new Set(rank.map(rank => rank.report_year))]
     const defaultyear = Math.max(...yearlist);
     //console.log(defaultyear)
     const [innerYear, setYear] = useState();
     const year = innerYear ?? defaultyear;
-    //console.log(rank)
-
+    //console.log(sector)
+    //const companyCount = sector.filter(sector => sector["report_year"] == year)
+    //console.log(companyCount)
+    //console.log(sector)
 
     return (
         <div
@@ -27,12 +29,12 @@ const Company_Metric_ranking = ({ rank }) => {
             </div>
             <table className='px-2'>
                 <tbody>
-                    {rank.map((rank, i) => (
+                    {rank.map((r, i) => (
                         <tr key={i} className="w-full border-b-1 border-neutral-200 dark:border-default-300 border-opacity-500 px-6 py-3 dark:border-opacity-500">
-                            <td className='text-sm px-2' width={40}>{rank.report_year}</td>
-                            <td className='text-sm px-2' width={70}>{rank.formula_type == 'ratio' ? Math.round(rank.metric_value * 100) + "%" : rank.metric_value}</td>
-                            <td className='font-light text-sm'>Rank {rank.metric_ranking}</td>
-                            <td className='font-light text-sm'>out of 16</td>
+                            <td className='text-sm px-2' width={40}>{r.report_year}</td>
+                            <td className='text-sm px-2' width={70}>{r.formula_type == 'ratio' ? Math.round(r.metric_value * 100) + "%" : r.metric_value}</td>
+                            <td className='font-light text-sm'>Rank {r.metric_ranking}</td>
+                            <td className='font-light text-sm'>out of {sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ? "" : sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count}</td>
                         </tr>
                     ))}
                 </tbody>

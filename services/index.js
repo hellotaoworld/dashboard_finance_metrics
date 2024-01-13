@@ -55,7 +55,7 @@ export const getCompanies = async (v_sector) => {
 
 export const getMetricList = async (v_sector) => {
 
-    const query = 'SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM valuation_engine_metrics_ranking r inner join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname inner join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_sector=?;'
+    const query = 'SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM valuation_engine_metrics_ranking r inner join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname inner join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_sector=? order by FIELD(f.formula_category,"Key Ratio","Profitability Ratio","Efficiency Ratio","Liquidity Ratio","Solvency Ratio","Miscellaneous Ratio");'
 
     const result = await connection.execute(query, [v_sector])
     //console.log(result[0])
@@ -85,7 +85,7 @@ export const getCompanyDetails = async (v_company) => {
 
 export const getCompanyOverview = async (v_company) => {
 
-    const query = 'SELECT r.`a.company_name` as "company_name",min(r.`a.report_year`) as "report_year_min", max(r.`a.report_year`) as "report_year_max", c.company_sector, c.company_ticker FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.`a.company_name`=c.company_name where r.`a.company_name`=? and r.`a.report_year` >=2022 GROUP BY c.company_sector,r.`a.company_name`, c.company_ticker;'
+    const query = 'SELECT r.`a.company_name` as "company_name",min(r.`a.report_year`) as "report_year_min", max(r.`a.report_year`) as "report_year_max", c.company_sector, c.company_ticker FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.`a.company_name`=c.company_name where r.`a.company_name`=? and r.`a.report_year` >=2012 GROUP BY c.company_sector,r.`a.company_name`, c.company_ticker;'
     const result = await connection.execute(query, [v_company])
     //console.log(result[0])
     return result[0]
@@ -102,7 +102,8 @@ export const getCompanyMetricList = async (v_company) => {
 
 export const getCompanyMetricDetails = async (v_company) => {
 
-    const query = 'SELECT r.`a.company_name` as "company_name",r.`a.report_year` as "report_year",r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,f.formula_type,c.company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname left join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_name=? and r.`a.report_year` >=2012;'
+    const query = 'SELECT r.`a.company_name` as "company_name",r.`a.report_year` as "report_year",r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,f.formula_type,c.company_sector \
+     FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname left join valuation_engine_mapping_company c on r.`a.company_name` = c.company_name where c.company_name=? and r.`a.report_year` >=2012;'
 
     const result = await connection.execute(query, [v_company])
     //console.log(result[0])

@@ -15,8 +15,8 @@ const Sidebar = () => {
     //setGlobalState('Tab', mapping[path])
     //const tabSelected = mapping[path] ?? 0
     const tabSelected = useGlobalState('Tab')[0];
-    console.log(tabSelected)
-    console.log(path)
+    //console.log(tabSelected)
+    //console.log(path)
 
     return (
         <div className='sidebar_wrapper'>

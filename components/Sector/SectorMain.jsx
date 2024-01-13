@@ -43,10 +43,16 @@ const SectorMain = ({ sector }) => {
     }, [sector])
 
     return (
-        <div>
-            <Sector_Intro sector={sector} sectorOverview={sectorOverview}></Sector_Intro>
-            <Sector_Metric_group metricList={metricList} metricDetails={metricDetails} sectorDetails={sectorDetails}>
-            </Sector_Metric_group>
+        <div className='grid grid-rows-subgrid gap-4 row-span-3'>
+            <div className="grid grid-flow-col gap-4">
+                <Sector_Intro sector={sector} sectorOverview={sectorOverview}></Sector_Intro>
+            </div>
+            <div className="grid grid-cols-3 grid-flow-col gap-4">
+                <div className='grid grid-flow-col col-span-3 gap-4'>
+                    <Sector_Metric_group metricList={metricList} metricDetails={metricDetails} sectorDetails={sectorDetails}>
+                    </Sector_Metric_group>
+                </div>
+            </div>
             {/*<Sector_Metric_detailtable metricList={metricList} sectorDetails={sectorDetails}></Sector_Metric_detailtable> */}
 
         </div>

@@ -3,8 +3,8 @@ import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 import Company_Metric_linegraph from './Company_Metric_linegraph'
 import Company_Metric_ranking from './Company_Metric_ranking'
 
-const Company_Metric_graphcard = ({ input, sectorinput, metric, rank }) => {
-
+const Company_Metric_graphcard = ({ input, sectorinput, metric, rank, sector }) => {
+    //console.log(sector)
     return (
         <Card>
             <CardHeader>
@@ -18,7 +18,7 @@ const Company_Metric_graphcard = ({ input, sectorinput, metric, rank }) => {
                         <Company_Metric_linegraph
                             input={input} sectorinput={sectorinput} companyname={metric[2]}>
                         </Company_Metric_linegraph></div>
-                    <div><Company_Metric_ranking rank={rank}></Company_Metric_ranking></div>
+                    <div><Company_Metric_ranking rank={rank} sector={sector}></Company_Metric_ranking></div>
                 </div>
             </CardBody>
         </Card>

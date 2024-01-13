@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 
 const Company_Intro = ({ company, companyOverview }) => {
+    //console.log(companyOverview)
     return (
         <div>
             <div className='mx-2 mb-2 text-3xl font-bold'>
