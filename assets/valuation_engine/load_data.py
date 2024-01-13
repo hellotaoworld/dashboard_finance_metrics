@@ -4,6 +4,10 @@ import pandas as pd
 from datetime import datetime
 
 ### Step 1: Load financial data into input table ###
+def transform_symbol(column_list):
+  return ["`" + column + "`" for column in column_list]
+
+
 def run():
   # Establish connection and cursor
   connection = database_connection.establish_database()
@@ -14,94 +18,6 @@ def run():
     
   # Table variables
   input_table_name = "valuation_engine_input"
-  input_column_names = [ "`a.index`"
-    ,"`a.company_name`"
-    ,"`a.report_end_date`"
-    ,"`a.report_period`"
-    ,"`a.report_year`"
-    ,"`a.url_bs`"
-    ,"`a.url_cfs`"
-    ,"`a.url_is`"
-    ,"`bs.account_receivable`"
-    ,"`bs.accounts_payable`"
-    ,"`bs.cash_n_equivalent`"
-    ,"`bs.goodwill`"    
-    ,"`bs.inventories`"
-    ,"`bs.long_term_debt_current`"
-    ,"`bs.long_term_debt_net_current`"
-    ,"`bs.pp_and_e`"
-    ,"`bs.retained_earnings`"  
-    ,"`bs.short_term_borrowing`"      
-    ,"`bs.st_investment`"
-    ,"`bs.total_assets`"
-    ,"`bs.total_current_assets`"
-    ,"`bs.total_current_liabilities`"    
-    ,"`bs.total_liabilities`"    
-    ,"`bs.total_shareholder_equity`"
-    ,"`bs.treasury_stock`"
-    ,"`cfs.amortization`"
-    ,"`cfs.capital_expenditure`"
-    ,"`cfs.cfo`"  
-    ,"`cfs.depreciation`"
-    ,"`cfs.depreciation_n_amortization`"
-    ,"`is.cost_of_sales`"
-    ,"`is.eps_basic`"
-    ,"`is.eps_diluted`"
-    ,"`is.general_administrative`"
-    ,"`is.income_tax_provision`"
-    ,"`is.interest_expense`"  
-    ,"`is.net_income`"
-    ,"`is.net_revenue`" 
-    ,"`is.num_shares_diluted`"
-    ,"`is.operating_income`"
-    ,"`is.r_and_d`"
-    ,"`is.selling_marketing`"
-    ,"`is.sg_and_a`"]
-  
-  input_column_check = [ "a.index`"
-    ,"a.company_name"
-    ,"a.report_end_date"
-    ,"a.report_period"
-    ,"a.report_year"
-    ,"a.url_bs"
-    ,"a.url_cfs"
-    ,"a.url_is"
-    ,"bs.account_receivable"
-    ,"bs.accounts_payable"
-    ,"bs.cash_n_equivalent"
-    ,"bs.goodwill"    
-    ,"bs.inventories"
-    ,"bs.long_term_debt_current"
-    ,"bs.long_term_debt_net_current"
-    ,"bs.pp_and_e"
-    ,"bs.retained_earnings"  
-    ,"bs.short_term_borrowing"      
-    ,"bs.st_investment"
-    ,"bs.total_assets"
-    ,"bs.total_current_assets"
-    ,"bs.total_current_liabilities"    
-    ,"bs.total_liabilities"    
-    ,"bs.total_shareholder_equity"
-    ,"bs.treasury_stock"
-    ,"cfs.amortization"
-    ,"cfs.capital_expenditure"
-    ,"cfs.cfo"  
-    ,"cfs.depreciation"
-    ,"cfs.depreciation_n_amortization"
-    ,"is.cost_of_sales"
-    ,"is.eps_basic"
-    ,"is.eps_diluted"
-    ,"is.general_administrative"
-    ,"is.income_tax_provision"
-    ,"is.interest_expense"  
-    ,"is.net_income"
-    ,"is.net_revenue" 
-    ,"is.num_shares_diluted"
-    ,"is.operating_income"
-    ,"is.r_and_d"
-    ,"is.selling_marketing"
-    ,"is.sg_and_a"]
-
   formula_table_name ="valuation_engine_mapping_formula"
   formula_column_names = ['formula_name', 'formula_value', 'formula_pseudo_code', 'formula_shortname', 'formula_category','formula_type','formula_direction']
 
@@ -117,11 +33,15 @@ def run():
     # Convert timestamp column to string format for MySQL insert
     df["a.report_end_date"] = pd.to_datetime(df["a.report_end_date"])
     df["a.report_end_date"] = df["a.report_end_date"].dt.strftime('%Y-%m-%d %H:%M:%S')
-    # print(df.columns==input_column_check)
+    #column_list.insert(0,"a.index")
+    #print(column_list.insert(0,"a.index"))
+    column_list = transform_symbol(df.columns[1:].insert(0,"a.index"))
+    #print(column_list)
+    #print(input_column_names)
     
     # Iterate through the DataFrame and insert rows into the MySQL table
     for _, row in df.iterrows():
-        insert_query = f"INSERT INTO {input_table_name} ({', '.join(input_column_names)}) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        insert_query = f"INSERT INTO {input_table_name} ({', '.join(column_list)}) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         values = tuple(row)  # Convert the row to a tuple
         #print(insert_query)
         #print(values)
