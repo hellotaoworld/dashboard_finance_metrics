@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 
 const Sector_Intro = ({ sectorOverview }) => {
     if (sectorOverview == null) {
-        return (<div></div>)
+        return (<div>No data available</div>)
     }
     else {
         return (

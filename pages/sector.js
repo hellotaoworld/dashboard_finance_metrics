@@ -9,7 +9,7 @@ const SectorPage = ({ sectors }) => {
     const sectorSelected = useGlobalState('Sector')[0];
     //console.log(sectorSelected)
 
-    if (sectorSelected == "") {
+    if (sectorSelected == "" | sectors == null) {
         return (
 
             <div className='container grid grid-rows-subgrid gap-4 row-span-2'>

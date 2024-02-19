@@ -4,7 +4,7 @@ import { Card, CardBody, CardHeader, CardFooter, Button } from "@nextui-org/reac
 const Company_Intro = ({ companyOverview }) => {
     //console.log(companyOverview)
     if (companyOverview == null) {
-        return (<div></div>)
+        return (<div>No data available</div>)
     }
     else {
         return (

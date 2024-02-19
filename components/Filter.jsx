@@ -26,7 +26,7 @@ const Filter = ({ sectors, status }) => {
 
     return (
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-2">
-            <Autocomplete className="max-w-xs"
+            <Autocomplete className="max-w-md"
                 label="Select a sector"
                 defaultItems={sectors}
                 defaultSelectedKey={useGlobalState("Sector")[0]} onSelectionChange={SectorHandler} >
@@ -35,7 +35,7 @@ const Filter = ({ sectors, status }) => {
                     <AutocompleteItem key={sector.company_sector} value={sector.company_sector}>{sector.company_sector}</AutocompleteItem>
                 ))}
             </Autocomplete>
-            <Autocomplete className="max-w-xs"
+            <Autocomplete className="max-w-md"
                 label="Select a company"
                 defaultItems={companyList}
                 defaultSelectedKey={useGlobalState("Company")[0]} onSelectionChange={CompanyHandler}>
