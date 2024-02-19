@@ -5,11 +5,11 @@ import Company_Stats_highlights from './Company_Stats_highlights'
 
 const Company_Stats = ({ input, ranking, metriclist }) => {
     //const currentYear = new Date().getFullYear();
-    const yearlist = [...new Set(input.map(input => input["a.report_year"]))]
+    const yearlist = [...new Set(input.map(input => input["report_year"]))]
     const defaultyear = Math.max(...yearlist);
     const [year, setYear] = useState(defaultyear);
 
-    const statement = input.filter(input => input["a.report_year"] == year)
+    const statement = input.filter(input => input["report_year"] == year)
     //console.log(input.filter(input => input["a.report_year"] == year))
 
     return (
@@ -23,7 +23,8 @@ const Company_Stats = ({ input, ranking, metriclist }) => {
                             <Company_Stats_highlights ranking={ranking} metriclist={metriclist}></Company_Stats_highlights>
                         </div>
                         <div>
-                            <Company_Stats_statement input={input}></Company_Stats_statement></div>
+                            <Company_Stats_statement input={input}></Company_Stats_statement>
+                        </div>
                     </div>
                 </CardBody>
             </Card>

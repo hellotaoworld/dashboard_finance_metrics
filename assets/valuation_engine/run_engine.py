@@ -1,6 +1,12 @@
-import load_data, calculate_metrics, calculate_ranking
+import extract_data, load_mapping, load_data, calculate_metrics, calculate_ranking
 
-print('****** Valuation Engine, v2 is triggered *****')
+print('****** Valuation Engine is triggered *****')
+print('=== Refreshing Mapping ===')
+load_mapping.run()
+print('=== Mapping Refreshed ===')
+print('=== Extract data ===')
+extract_data.run()
+print('=== Data extracted ===')
 print('=== Start Loading Data ===')
 load_data.run()
 print('=== Data Load Completed ===')
@@ -10,4 +16,7 @@ print('=== Metrics Calculation Completed ===')
 print('=== Start Calculating Ranking ===')
 calculate_ranking.run()
 print('=== Ranking Calculation Completed ===')
-print('****** Load has been completed successfully *****')
+#print('=== Update Cloud Database ===')
+#update_cloud.run()
+#print('=== Cloud Database Updated ===')
+#print('****** Load has been completed successfully *****')

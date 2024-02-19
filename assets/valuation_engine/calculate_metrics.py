@@ -3,70 +3,47 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-#### Step 2: Calculate metrics and load to metric table ###
+# Helper functions
+def transform_symbol(column_list):
+  return ["`" + column + "`" for column in column_list]
 
 def run():
     # Establish connection and cursor
-    connection = database_connection.establish_database()
+    connection = database_connection.establish_local_database()
     cursor = connection.cursor()
 
-    # Table variables
-    input_table_name = "valuation_engine_input"
-    formula_table_name ="valuation_engine_mapping_formula"
-    metric_table_name = "valuation_engine_metrics"
-    metric_table_columns =['`a.company_name`', 
-                        '`a.report_period`', 
-                        '`a.report_year`',
-                        '`revenue_growth_rate`',
-                        '`return_on_invested_capital_rate`',
-                        '`eps_growth_rate`', 
-                        '`adj_equity_growth_rate`',
-                        '`free_cashflow_growth_rate`',
-                        '`days_inventory_on_hand`',
-                        '`days_sales_outstanding`', 
-                        '`days_payable`', 
-                        '`cash_conversion_cycle`',
-                        '`working_capital_turnover`', 
-                        '`total_asset_turnover`', 
-                        '`quick_ratio`',
-                        '`cash_ratio`',
-                        '`debt_to_asset`',
-                        '`debt_to_capital`',
-                        '`debt_to_equity`',
-                        '`financial_leverage`', 
-                        '`interest_coverage`',
-                        '`interest_ratio`',
-                        '`gross_profit_margin`',
-                        '`operating_profit_margin`',
-                        '`ebitda_margin`',
-                        '`net_profit_margin`',
-                        '`return_on_asset`',
-                        '`return_on_equity`',
-                        '`sg_a_ratio`',
-                        '`r_d_ratio`', 
-                        '`depreciation_ratio`', 
-                        '`cash_growth_rate`',
-                        '`debt_growth_rate`', 
-                        '`outstanding_shares_growth_rate`',
-                        '`inventory_growth_rate`',
-                        '`pp_e_growth_rate`', 
-                        '`goodwill_growth_rate`',
-                        '`total_asset_growth_rate`']
-
     # Read formula
-    formula_query =f"SELECT * FROM {formula_table_name}"
+    formula_query =f"SELECT * FROM valuation_engine_mapping_formula"
     mapping_formula_df = pd.read_sql(formula_query, connection)
-    formula_names = mapping_formula_df.iloc[:, 4].tolist()
+    formula_names = mapping_formula_df['formula_shortname'].tolist()
+    
+    # Read company list
+    company_query =f"SELECT * FROM valuation_engine_mapping_company where type='pick'"
+    company_df = pd.read_sql(company_query, connection)
+    ciklist = company_df['cik'].tolist()
+    company_names = company_df['company'].tolist()
+    
+    ### function ###
+    def calculate_metrics(cik):
+        data_query =f"SELECT i.cik, left(i.ddate,4) as 'report_year', c.company as 'company_name', i.mapping, i.value FROM valuation_engine_inputs i left join valuation_engine_mapping_company c on i.cik=c.cik WHERE i.cik='{cik}' and i.fy =(SELECT max(fy) from web_application.valuation_engine_inputs where cik=i.cik and mapping =i.mapping and left(ddate,4)=left(i.ddate,4))"
+        input_df = pd.read_sql(data_query, connection)
+        
+        q_df = input_df.pivot_table(index=['cik', 'report_year', 'company_name'],columns='mapping', values='value',aggfunc='sum').reset_index()
+        column_list = q_df.columns
+        #print(column_list)
+        # Load into database 
+        for _, row in q_df.iterrows():
+            insert_query = f"INSERT INTO valuation_engine_values ({', '.join(transform_symbol(column_list))}) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            values = tuple(row)
+            #cursor.execute(insert_query, values)
 
-    def calculate_metrics(company_v):
-        data_query =f"SELECT * FROM {input_table_name} WHERE `a.company_name`='{company_v}'"
-        q_df = pd.read_sql(data_query, connection)
-        ratio_df = q_df[['a.company_name','a.report_period','a.report_year']]
+        ratio_df = q_df[['cik', 'report_year', 'company_name']]
+        #print(q_df['is.net_revenue'])
+        
         # calculate
         for index, row in q_df.iterrows():
             for formula_name in formula_names:
-                formula_value = mapping_formula_df.loc[mapping_formula_df.iloc[:, 4] == formula_name, mapping_formula_df.columns[2]].values[0]
-                #print(formula_value)
+                formula_value = mapping_formula_df.loc[mapping_formula_df['formula_shortname'] == formula_name, mapping_formula_df.columns[2]].values[0]
                 try:
                     ratio_df.loc[index, formula_name] = eval(formula_value)
                 except:
@@ -75,35 +52,26 @@ def run():
         
         # Replace inf and -inf values with NULL
         ratio_df = ratio_df.replace([np.inf, -np.inf], np.nan)
-        #print(company_v)
-        #print(ratio_df['days_inventory_on_hand'])
+        column_list = ratio_df.columns
         
         # Load into database 
         for _, row in ratio_df.iterrows():
-            insert_query = f"INSERT INTO {metric_table_name} ({', '.join(metric_table_columns)}) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            insert_query = f"INSERT INTO valuation_engine_metrics ({', '.join(transform_symbol(column_list))}) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
             values = tuple(row)
-            #print(insert_query)
-            #print(values)
             cursor.execute(insert_query, values)
         connection.commit()
-        print(f"Ratio updated successfully for {company_v}.")   
-         
+        print(f"Ratio updated successfully for {cik}.")   
 
-    # Refresh the ratio table with loop calculation for the list of companies
-    company_query =f"SELECT distinct `a.company_name` FROM {input_table_name}"
-    company_names = pd.read_sql(company_query, connection).iloc[:, 0].tolist()
-
-    truncate_metric_query = f"TRUNCATE TABLE {metric_table_name}"
+    truncate_metric_query = f"TRUNCATE TABLE valuation_engine_metrics"
     cursor.execute(truncate_metric_query)
-    print(f"Table {metric_table_name} is truncated.")
-
-    print(company_names)
-    #calculate_metrics('AMKOR TECHNOLOGY, INC.')
-
-    for company in company_names:
-        calculate_metrics(company)        
-
+    print(f"Table valuation_engine_metrics is truncated.")
+    
+    for cik in ciklist:
+        calculate_metrics(cik)        
+    #calculate_metrics('2488')
+    
     # Close the cursor and connection
     cursor.close()
     connection.close()
 
+#run()

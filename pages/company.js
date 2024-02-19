@@ -8,7 +8,7 @@ import { CompanyMain } from '@/components';
 const CompanyPage = ({ sectors }) => {
     const sectorSelected = useGlobalState('Sector')[0];
     const companySelected = useGlobalState('Company')[0];
-    if (sectorSelected == "" | companySelected == '') {
+    if (sectorSelected == "" | companySelected == "") {
         return (
 
             <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
