@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from '@nextui-org/react'
+import { getCompanyPick } from '@/services';
+import Pick from '@/components/Pick';
 
-export default function Home() {
+export default function Home({companypick}) {
   return (
     <main>
       <Head><title>Valuation Engine Dashboard</title>
@@ -11,7 +13,8 @@ export default function Home() {
       <div className='grid grid-rows-1'>
 
         <div className='mx-2 my-2 text-3xl font-bold'>
-          About Valuation Engine
+          Valuation Engine
+          <Pick companies={companypick}/>
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
@@ -50,3 +53,9 @@ export default function Home() {
   )
 }
 
+export async function getServerSideProps() {
+  const companypick = (await getCompanyPick()) || [];
+  return {
+      props: { companypick }
+  }
+}

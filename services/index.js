@@ -5,7 +5,15 @@ const mysql = require('mysql2/promise');
 
 
 // create the connection, specify bluebird as Promise
-const connection = await mysql.createConnection(process.env.DATABASE_URL);
+
+//   const connection = await mysql.createConnection(process.env.DATABASE_URL);
+const connection = await mysql.createConnection({
+    "host":process.env.LOCALDB_HOST,
+    "user":process.env.LOCALDB_USERNAME,
+    "password": process.env.LOCALDB_PASSWORD,
+    "database": process.env.LOCALDB_NAME,
+    "port":process.env.LOCALDB_PORT
+  });
 
 export const getSectors = async () => {
     const query = 'SELECT distinct industry as company_sector FROM valuation_engine_mapping_company order by industry'
@@ -41,6 +49,15 @@ export const getSectorDetails = async (v_sector) => {
     //console.log(result[0])
     return result[0]
 }
+
+export const getCompanyPick = async () => {
+    const query = 'SELECT distinct company as company_name, industry as sector, cik, type FROM valuation_engine_mapping_company order by company_name'
+    const result = await connection.execute(query)
+    //console.log(result[0])
+    return result[0]
+}
+
+
 
 export const getCompanies = async (v_sector) => {
 

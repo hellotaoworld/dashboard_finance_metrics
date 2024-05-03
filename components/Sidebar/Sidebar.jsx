@@ -39,14 +39,6 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li className='sidebar_item'>
-                        <Link href="/sector"
-                            className={tabSelected == 1 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
-                            onClick={(e) => { setGlobalState('Tab', 1) }}>
-                            <span className='sidebar_icon'><VscTelescope /></span>
-                            <span className='sidebar_name'>Sector Overview</span>
-                        </Link>
-                    </li>
-                    <li className='sidebar_item'>
                         <Link href="/company"
                             className={tabSelected == 2 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
                             onClick={(e) => { setGlobalState('Tab', 2) }}>
@@ -54,6 +46,15 @@ const Sidebar = () => {
                             <span className='sidebar_name'>Company Profile</span>
                         </Link>
                     </li>
+                    <li className='sidebar_item'>
+                        <Link href="/sector"
+                            className={tabSelected == 1 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
+                            onClick={(e) => { setGlobalState('Tab', 1) }}>
+                            <span className='sidebar_icon'><VscTelescope /></span>
+                            <span className='sidebar_name'>Sector Overview</span>
+                        </Link>
+                    </li>
+                    
 
                 </ul>
 
