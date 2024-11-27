@@ -8,12 +8,12 @@ const mysql = require('mysql2/promise');
 
 //   const connection = await mysql.createConnection(process.env.DATABASE_URL);
 const connection = await mysql.createConnection({
-    "host":process.env.LOCALDB_HOST,
-    "user":process.env.LOCALDB_USERNAME,
-    "password": process.env.LOCALDB_PASSWORD,
-    "database": process.env.LOCALDB_NAME,
-    "port":process.env.LOCALDB_PORT
-  });
+    "host": process.env.DB_HOST,
+    "user": process.env.DB_USERNAME,
+    "password": process.env.DB_PASSWORD,
+    "database": process.env.DB_NAME,
+    "port": process.env.DB_PORT
+});
 
 export const getSectors = async () => {
     const query = 'SELECT distinct industry as company_sector FROM valuation_engine_mapping_company order by industry'
