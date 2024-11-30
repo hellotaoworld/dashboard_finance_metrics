@@ -3,3 +3,4 @@ export { default as Sidebar } from './Sidebar/Sidebar';
 export { default as Filter } from './Filter';
 export { default as SectorMain } from './Sector/SectorMain';
 export { default as CompanyMain } from './Company/CompanyMain';
+export { default as AdminMain } from './Admin/AdminMain';

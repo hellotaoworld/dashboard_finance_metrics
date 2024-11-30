@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import { VscTelescope, VscInfo, VscGraphLine, VscChevronRight, VscChevronLeft } from "react-icons/vsc";
+import { VscTelescope, VscInfo, VscGraphLine, VscChevronRight, VscChevronLeft, VscLock, VscHome } from "react-icons/vsc";
 import { BsFillMoonFill, BsSunFill } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import { useGlobalState, setGlobalState } from '@/state';
@@ -11,7 +11,7 @@ const Sidebar = () => {
     const [isCollapsedSidebar, setisCollapsedSidebar] = useState(false);
     const { theme, setTheme } = useTheme();
     const path = typeof window !== 'undefined' ? window.location.pathname : undefined; // Pathname only
-    const mapping = { '/': 0, '/sector': 1, '/company': 2 }
+    const mapping = { '/': 0, '/sector': 1, '/company': 2, '/admin': 3 }
     //setGlobalState('Tab', mapping[path])
     //const tabSelected = mapping[path] ?? 0
     const tabSelected = useGlobalState('Tab')[0];
@@ -34,7 +34,7 @@ const Sidebar = () => {
                         <Link href="/"
                             className={tabSelected == 0 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
                             onClick={(e) => { setGlobalState('Tab', 0) }}>
-                            <span className='sidebar_icon'><VscInfo /></span>
+                            <span className='sidebar_icon'><VscHome /></span>
                             <span className='sidebar_name'>Home</span>
                         </Link>
                     </li>
@@ -54,7 +54,15 @@ const Sidebar = () => {
                             <span className='sidebar_name'>Sector Overview</span>
                         </Link>
                     </li>
-                    
+                    <li className='sidebar_item'>
+                        <Link href="/admin"
+                            className={tabSelected == 3 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
+                            onClick={(e) => { setGlobalState('Tab', 3) }}>
+                            <span className='sidebar_icon'><VscLock /></span>
+                            <span className='sidebar_name'>Local Admin</span>
+                        </Link>
+                    </li>
+
 
                 </ul>
 

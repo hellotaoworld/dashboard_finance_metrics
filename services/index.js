@@ -1,12 +1,5 @@
 const mysql = require('mysql2/promise');
-//import mysql from 'mysq2/promoise'
 
-//const connection = mysql.createConnection(process.env.DATABASE_URL);
-
-
-// create the connection, specify bluebird as Promise
-
-//   const connection = await mysql.createConnection(process.env.DATABASE_URL);
 const connection = await mysql.createConnection({
     "host": process.env.DB_HOST,
     "user": process.env.DB_USERNAME,
@@ -15,13 +8,24 @@ const connection = await mysql.createConnection({
     "port": process.env.DB_PORT
 });
 
-//const connection = await mysql.createConnection({
-//    "host": process.env.LOCALDB_HOST,
-//    "user": process.env.LOCALDB_USERNAME,
-//    "password": process.env.LOCALDB_PASSWORD,
-//    "database": process.env.LOCALDB_NAME,
-//    "port": process.env.LOCALDB_PORT
-//});
+
+export const checkDatabaseConnection = async () => {
+    try {
+        const connection = await mysql.createConnection({
+            "host": process.env.LOCALDB_HOST,
+            "user": process.env.LOCALDB_USERNAME,
+            "password": process.env.LOCALDB_PASSWORD,
+            "database": process.env.LOCALDB_NAME,
+            "port": process.env.LOCALDB_PORT
+        });
+        await connection.query('SELECT 1');
+        await connection.end();
+        return 'connected';
+    } catch (error) {
+        return 'disconnected';
+    }
+}
+
 
 export const getSectors = async () => {
     const query = "SELECT distinct industry as company_sector FROM valuation_engine_mapping_company order by industry"
