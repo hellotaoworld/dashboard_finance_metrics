@@ -126,6 +126,19 @@ table {
   font-size: 1.1rem;
 }
 
+.refresh_btn {
+
+  border: none;
+  width: 13rem;
+  height: 2rem;
+  border-radius: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transform: translateX(50%);
+  font-size: 1.1rem;
+}
 
 [data-collapse="true"] {
   width: 5.3rem;

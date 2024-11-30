@@ -1,14 +1,5 @@
 const mysql = require('mysql2/promise');
 
-const connection = await mysql.createConnection({
-    "host": process.env.DB_HOST,
-    "user": process.env.DB_USERNAME,
-    "password": process.env.DB_PASSWORD,
-    "database": process.env.DB_NAME,
-    "port": process.env.DB_PORT
-});
-
-
 export const checkDatabaseConnection = async () => {
     try {
         const connection = await mysql.createConnection({
@@ -25,8 +16,24 @@ export const checkDatabaseConnection = async () => {
         return 'disconnected';
     }
 }
+let connection = await mysql.createConnection({
+    "host": process.env.LOCALDB_HOST,
+    "user": process.env.LOCALDB_USERNAME,
+    "password": process.env.LOCALDB_PASSWORD,
+    "database": process.env.LOCALDB_NAME,
+    "port": process.env.LOCALDB_PORT
+});
 
-
+if (checkDatabaseConnection == 0) {
+    // if not local, use cloud database
+    connection = await mysql.createConnection({
+        "host": process.env.DB_HOST,
+        "user": process.env.DB_USERNAME,
+        "password": process.env.DB_PASSWORD,
+        "database": process.env.DB_NAME,
+        "port": process.env.DB_PORT
+    });
+}
 export const getSectors = async () => {
     const query = "SELECT distinct industry as company_sector FROM valuation_engine_mapping_company order by industry"
     const result = await connection.execute(query)
