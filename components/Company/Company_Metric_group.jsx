@@ -58,9 +58,22 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
 
     return (
         <div>
-            <Tabs aria-label="Graphs" className='my-4'>
+            <Tabs aria-label="Graphs" className='my-4' SelectedKey="0">
+                <Tab key="6" title="Trading View">
+                    <Card>
+                        <CardBody>
+                            <iframe
+                                src={stockview}
+                                width="100%"
+                                height="500"
+                                style={{ border: "none" }}
+                            ></iframe>
+                        </CardBody>
+                    </Card>
+
+                </Tab>
                 {metricGroup.map((group, i) => (
-                    <Tab key={i} title={group}>
+                    <Tab key={i.toString()} title={group}>
                         <div className="gap-3 grid grid-cols-1 sm:grid-cols-2">
                             {sectormetricList.filter(metricItem => metricItem.formula_category === group)
                                 .map((item, index) => (
@@ -80,21 +93,7 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
 
                     </Tab>
                 ))}
-                <Tab key="Mapping" title="Trading View">
-                    <Card>
-                        <CardBody>
-                            <iframe
-                                src={stockview}
-                                width="100%"
-                                height="500"
-                                style={{ border: "none" }}
-                                title="TradingView Widget"
-                                allowFullScreen
-                            ></iframe>
-                        </CardBody>
-                    </Card>
 
-                </Tab>
             </Tabs>
         </div >
     )

@@ -27,11 +27,11 @@ export const checkDatabaseConnection = async () => {
 const createConnection = async () => {
     const isLocalAvailable = await checkDatabaseConnection();
     return await mysql.createConnection({
-        host: isLocalAvailable ? process.env.LOCALDB_HOST : process.env.DB_HOST,
-        user: isLocalAvailable ? process.env.LOCALDB_USERNAME : process.env.DB_USERNAME,
-        password: isLocalAvailable ? process.env.LOCALDB_PASSWORD : process.env.DB_PASSWORD,
-        database: isLocalAvailable ? process.env.LOCALDB_NAME : process.env.DB_NAME,
-        port: isLocalAvailable ? process.env.LOCALDB_PORT : process.env.DB_PORT,
+        host: isLocalAvailableCache == "connected" ? process.env.LOCALDB_HOST : process.env.DB_HOST,
+        user: isLocalAvailableCache == "connected" ? process.env.LOCALDB_USERNAME : process.env.DB_USERNAME,
+        password: isLocalAvailableCache == "connected" ? process.env.LOCALDB_PASSWORD : process.env.DB_PASSWORD,
+        database: isLocalAvailableCache == "connected" ? process.env.LOCALDB_NAME : process.env.DB_NAME,
+        port: isLocalAvailableCache == "connected" ? process.env.LOCALDB_PORT : process.env.DB_PORT,
     });
 };
 
