@@ -1,9 +1,20 @@
 import React from 'react'
 import Company_Metric_graphcard from './Company_Metric_graphcard'
 import { Tabs, Tab } from '@nextui-org/react';
+import { Card, CardBody } from '@nextui-org/react';
 
-const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormetricList }) => {
-    //console.log(sectorDetails)
+const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormetricList, companyOverview }) => {
+    const exchangeMapping = {
+        NYQ: "NYSE",
+        NMS: "NASDAQ",
+        YHD: "NYSE",
+        NCM: "NASDAQ",
+        BTS: "BATS",
+        NGM: "NASDAQ",
+    };
+    const mappedExchange = exchangeMapping[companyOverview.exchange] || companyOverview.exchange;
+
+    const stockview = `https://s.tradingview.com/widgetembed/?symbol=${mappedExchange}:${companyOverview.company_ticker}&interval=D&theme=light&style=1&locale=en&toolbar_bg=f1f3f6&studies=[]&enabled_features=[]&disabled_features=[]&hide_side_toolbar=false&allow_symbol_change=true&save_image=false&show_popup_button=true&popup_width=1000&popup_height=650`
 
     const metricGroup = [...new Set(sectormetricList.map(metricList => metricList.formula_category))]
     const sectormetricFieldName = [...new Set(sectormetricList.map(sectormetricList => sectormetricList.formula_shortname))]
@@ -69,6 +80,21 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
 
                     </Tab>
                 ))}
+                <Tab key="Mapping" title="Trading View">
+                    <Card>
+                        <CardBody>
+                            <iframe
+                                src={stockview}
+                                width="100%"
+                                height="500"
+                                style={{ border: "none" }}
+                                title="TradingView Widget"
+                                allowFullScreen
+                            ></iframe>
+                        </CardBody>
+                    </Card>
+
+                </Tab>
             </Tabs>
         </div >
     )

@@ -169,7 +169,7 @@ export const getMetricDetails = async (v_sector) => {
 export const getCompanyOverview = async (v_company) => {
     let connection;
     try {
-        const query = "SELECT r.company_name as 'company_name',min(r.report_year) as 'report_year_min', max(r.report_year) as 'report_year_max', r.industry as company_sector, c.symbol as company_ticker, c.fye, c.cik FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.cik=c.cik where r.company_name=? and r.report_year >=2012 GROUP BY r.industry,r.company_name, c.symbol;"
+        const query = "SELECT r.company_name as 'company_name',min(r.report_year) as 'report_year_min', max(r.report_year) as 'report_year_max', r.industry as company_sector, c.symbol as company_ticker, c.fye, c.cik, c.exchange FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.cik=c.cik where r.company_name=? and r.report_year >=2012 GROUP BY r.industry,r.company_name, c.symbol;"
         connection = await createConnection();
         const result = await connection.execute(query, [v_company])
         //console.log(result[0])

@@ -83,7 +83,7 @@ const CompanyMain = ({ sector, company }) => {
                             metricDetails={metricDetails}
                             company={company}
                             sectorDetails={sectorDetails}
-                            sectormetricList={sectormetricList}></Company_Metric_group>
+                            sectormetricList={sectormetricList} companyOverview={companyOverview}></Company_Metric_group>
                     </div>
                 </div>
                 <div className='grid grid-flow-col gap-4 mb-4'>
