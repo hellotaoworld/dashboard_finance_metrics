@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs, Tab, Card, CardBody } from '@nextui-org/react';
 import AdminRefresh from './Admin_Refresh'
-
+import AdminMapping from './Admin_Mapping';
 
 
 const AdminMain = ({ companypick }) => {
@@ -13,17 +13,7 @@ const AdminMain = ({ companypick }) => {
                 <AdminRefresh></AdminRefresh>
             </Tab>
             <Tab key="Mapping" title="Mapping">
-                <Card>
-                    <CardBody>
-                        <iframe
-                            src="https://www.google.com/finance/quote/COST:NASDAQ"
-                            width="100%"
-                            height="500"
-                            style={{ border: "none" }}
-                            title="Google Finance Chart"
-                        ></iframe>
-                    </CardBody>
-                </Card>
+                <AdminMapping></AdminMapping>
             </Tab>
 
         </Tabs>
