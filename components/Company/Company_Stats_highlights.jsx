@@ -30,7 +30,7 @@ const Company_Stats_highlights = ({ ranking, metriclist }) => {
                     {top_stats.map((ranking, k) => (
                         <p key={k} className='mb-2'>
                             <p className=''>
-                                🏆
+                                🟢
                                 Ranked #{ranking.metric_ranking}
                                 <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
                             </p>
@@ -55,7 +55,7 @@ const Company_Stats_highlights = ({ ranking, metriclist }) => {
                     {bottom_stats.map((ranking, k) => (
                         <p key={k} className='mb-2'>
                             <p className=''>
-                                ⚠
+                                🔻
                                 Ranked #{ranking.metric_ranking}
                                 <span className='text-sm'>&nbsp;in&nbsp;{ranking.count}&nbsp;{ranking.count == 1 ? "metric" : "metrics"}</span>
                             </p>

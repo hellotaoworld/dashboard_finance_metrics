@@ -40,9 +40,9 @@ const Company_Metric_ranking = ({ rank, sector }) => {
                         <tr key={i} className="w-full border-b-1 border-neutral-200 dark:border-default-300 border-opacity-500 px-6 py-3 dark:border-opacity-500">
                             <td className='text-sm px-2' width={40}>{r.report_year}</td>
                             <td className='text-sm px-2' width={60}>{r.formula_type == 'ratio' ? Math.round(r.metric_value * 100) + "%" : r.metric_value}</td>
-                            <td>{r.metric_ranking <= 3 ? "🏆" : ""}
+                            <td>{r.metric_ranking <= 3 ? "🟢" : ""}
                                 {sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ?
-                                    "" : (r.metric_ranking >= sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count - 3 && r.metric_ranking > 3 ? "⚠" : "")}</td>
+                                    "" : (r.metric_ranking >= sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count - 3 && r.metric_ranking > 3 ? "🔻" : "")}</td>
                             <td className='font-light text-sm'>{r.metric_ranking}/{sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ? "" : sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count}</td>
 
 

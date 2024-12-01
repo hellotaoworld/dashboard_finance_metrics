@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Tabs, Tab, Card, CardBody } from '@nextui-org/react';
 import AdminRefresh from './Admin_Refresh'
 
-const AdminMain = () => {
-
+const AdminMain = ({ companypick }) => {
 
     return (
         <Tabs aria-label="Graphs" className='my-4'>
