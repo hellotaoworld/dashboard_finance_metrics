@@ -102,7 +102,7 @@ export const getSectorDetails = async (v_sector) => {
 export const getCompanyPick = async () => {
     let connection;
     try {
-        const query = "SELECT distinct company as company_name, industry as sector, cik, type FROM valuation_engine_mapping_company order by company_name"
+        const query = "SELECT distinct company as company_name, industry as sector, cik, sic, (case when type is null then 'No' else 'Yes' end) as type, fye, qtr, exchange, symbol FROM valuation_engine_mapping_company order by company_name"
         connection = await createConnection();
         const result = await connection.execute(query)
         //console.log(result[0])

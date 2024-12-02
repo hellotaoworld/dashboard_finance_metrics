@@ -1,8 +1,9 @@
 import React from 'react'
+import CompanyMapping from './Admin_CompanyMapping'
 
 const AdminMapping = () => {
     return (
-        <div>hello</div>
+        <div><CompanyMapping></CompanyMapping></div>
     )
 }
 
