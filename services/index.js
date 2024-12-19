@@ -273,3 +273,88 @@ export const getCompanyRanking = async (v_company) => {
         if (connection) await connection.end(); // Ensure connection is closed
     }
 }
+
+
+export const updateCompanyMapping = async (v_company, cik) => {
+    let connection;
+    try {
+        const query = "UPDATE valuation_engine_mapping_company SET company = ?,\
+                    sic = ?,\
+                    industry = ?,\
+                    type = ?,\
+                    exchange = ?,\
+                    symbol = ?\
+                WHERE cik = ?;"
+        const params = [
+            v_company.company_name,
+            v_company.sic,
+            v_company.sector,
+            v_company.type,
+            v_company.exchange,
+            v_company.symbol,
+            cik
+        ]
+        connection = await createConnection();
+        const result = await connection.execute(query, params)
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+
+
+}
+
+export const insertCompanyMapping = async (v_company) => {
+    let connection;
+    try {
+        const query = "INSERT INTO valuation_engine_mapping_company \
+                    (cik, company, sic, industry, type, exchange, symbol) \
+                    VALUES(?, ?, ?, ?, ?, ?, ?)"
+        const params = [
+            v_company.cik,
+            v_company.company_name,
+            v_company.sic,
+            v_company.sector,
+            v_company.type,
+            v_company.exchange,
+            v_company.symbol
+        ]
+        connection = await createConnection();
+        const result = await connection.execute(query, params)
+        console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+
+
+}
+
+export const deleteCompanyMapping = async (cik) => {
+    let connection;
+    try {
+        const query = "DELETE FROM valuation_engine_mapping_company \
+                WHERE cik = ?;"
+        const params = [
+            cik
+        ]
+        connection = await createConnection();
+        const result = await connection.execute(query, params)
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+
+
+}
