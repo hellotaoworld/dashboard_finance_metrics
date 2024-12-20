@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from 'react';
-import DataTable from 'react-data-table-component'
+import DataTable, { createTheme } from 'react-data-table-component'
 import axios from 'axios';
 
 
@@ -8,9 +8,28 @@ const CompanyMapping = ({ sectors }) => {
     const [editRowId, setEditRowId] = useState(null);
     const [newRow, setNewRow] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
-
+    const customStyles = {
+        rows: {
+            style: {
+                backgroundColor: 'transparent', // For fallback
+                className: 'bg-default-100 dark:bg-default-800', // Add Tailwind classes dynamically
+            },
+        },
+        header: {
+            style: {
+                backgroundColor: 'transparent',
+                className: 'bg-default-100 dark:bg-default-800', // Tailwind for header
+            },
+        },
+        cells: {
+            style: {
+                className: 'bg-default-50 dark:bg-default-900 text-default-500', // Tailwind for cells
+            },
+        },
+    };
     //console.log(editRowId)
     //console.log(newRow)
+
 
     useEffect(() => {
         fetch(`/api/mapping/getcompany`)
@@ -288,15 +307,7 @@ const CompanyMapping = ({ sectors }) => {
                 paginationRowsPerPageOptions={[20, 50, 100, filteredData.length]}
                 highlightOnHover
                 dense
-                customStyles={{
-                    cells: {
-                        style: {
-                            //whiteSpace: 'nowrap', // Prevent wrapping
-                            overflow: 'visible', // Hide overflow
-                            //textOverflow: 'ellipsis', // Add ellipsis
-                        },
-                    },
-                }}
+                customStyles={customStyles}
             />
         </div>
     )
