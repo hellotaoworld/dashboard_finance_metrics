@@ -2,7 +2,8 @@ import { useState, useEffect, React } from 'react';
 import DataTable from 'react-data-table-component'
 import axios from 'axios';
 
-const CompanyMapping = () => {
+
+const CompanyMapping = ({ sectors }) => {
     const [data, setData] = useState([]);
     const [editRowId, setEditRowId] = useState(null);
     const [newRow, setNewRow] = useState({});
@@ -20,12 +21,22 @@ const CompanyMapping = () => {
             .catch((error) => console.error('Error fetching data:', error));
     }, [])
 
+    useEffect(() => {
+        fetch(`/api/mapping/getcompany`)
+            .then(res => res.json())
+            .then(value => {
+                setData(value);
+            })
+            .catch((error) => console.error('Error fetching data:', error));
+    }, [])
+
     // Handle edit/save action
     const handleEdit = (id) => {
         //console.log(id);
-        //console.log(editRowId);
+
         if (editRowId === id) {
             // Save the changes
+            //console.log("save" + editRowId);
             const updatedRow = data.find((row) => row.cik === id);
             axios
                 .put('/api/mapping/updatecompany', { id, data: updatedRow })
@@ -60,12 +71,37 @@ const CompanyMapping = () => {
         if (id === "New") {
             setNewRow((prevRow) => ({ ...prevRow, [field]: value }));
         } else {
-            setData((prevData) =>
-                prevData.map((row) =>
-                    row.cik === id ? { ...row, [field]: value } : row
-                )
-            );
+            if (field === "sector") {
+                setData((prevData) =>
+                    prevData.map((row) =>
+                        row.cik === id ? { ...row, ["sector"]: value } : row
+                    )
+                );
+                const sic = sectors.find((item) => item.company_sector === value).sic;
+                setData((prevData) =>
+                    prevData.map((row) =>
+                        row.cik === id ? { ...row, ["sic"]: sic } : row
+                    )
+                );
+            }
+            else {
+                setData((prevData) =>
+                    prevData.map((row) =>
+                        row.cik === id ? { ...row, [field]: value } : row
+                    )
+                );
+            };
         }
+        if (field === "type") {
+            const updatedRow = { ...data.find((row) => row.cik === id), [field]: value };
+            axios
+                .put('/api/mapping/updatecompany', { id, data: updatedRow })
+                .then(() => {
+                    setEditRowId(null); // Exit edit mode
+                })
+                .catch((error) => console.error('Error updating row:', error));
+        }
+
     };
     // Handle add new row
     const handleAddRow = () => {
@@ -104,7 +140,7 @@ const CompanyMapping = () => {
         {
             name: 'CIK', selector: (row) =>
                 editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
-                    <input
+                    <input className='w-full border rounded px-2 py-1'
                         defaultValue={editRowId === "New" ? newRow.cik || '' : row.cik}
                         onBlur={(e) => handleInputBlur(editRowId === "New" ? "New" : row.cik, 'cik', e.target.value)}
                     />
@@ -116,71 +152,76 @@ const CompanyMapping = () => {
         {
             name: 'Company', selector: (row) =>
                 editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
-                    <input
+                    <input className='w-full border rounded px-2 py-1'
                         defaultValue={editRowId === "New" ? newRow.company_name || '' : row.company_name}
                         onBlur={(e) =>
-                            handleInputBlur(editRowId === "New" ? "New" : row.company_name, 'company_name', e.target.value)
+                            handleInputBlur(editRowId === "New" ? "New" : row.cik, 'company_name', e.target.value)
                         }
                     />
                 ) : (
                     row.company_name
                 ), sortable: true
-            , width: '25%'
-        },
-        {
-            name: 'SIC', selector: (row) =>
-                editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
-                    <input
-                        defaultValue={editRowId === "New" ? newRow.sic || '' : row.sic}
-                        onBlur={(e) =>
-                            handleInputBlur(editRowId === "New" ? "New" : row.sic, 'sic', e.target.value)
-                        }
-                    />
-                ) : (
-                    row.sic
-                ), sortable: true
-            , width: '5%'
+            , width: '20%'
         },
         {
             name: 'Sector', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
-                <input
-                    defaultValue={editRowId === "New" ? newRow.sector || '' : row.sector}
-                    onBlur={(e) =>
-                        handleInputBlur(editRowId === "New" ? "New" : row.sector, 'industry', e.target.value)
+
+                <select
+                    className='w-full border rounded px-2 py-1'
+                    value={editRowId === "New" ? newRow.sector || '' : row.sector}
+                    onChange={(e) =>
+                        handleInputBlur(editRowId === "New" ? "New" : row.cik, 'sector', e.target.value)
                     }
-                />
+                >
+                    <option value=""></option>
+                    {sectors.map((s, i) => (
+                        <option key={i} value={s.company_sector}>{s.company_sector}</option>
+                    ))}
+
+                </select>
+
             ) : (
                 row.sector
             ), sortable: true
-            , width: '25%'
+            , width: '30%'
         },
-        {
-            name: 'Stared', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
-                <input
-                    defaultValue={editRowId === "New" ? newRow.type || '' : row.type}
-                    onBlur={(e) =>
-                        handleInputBlur(editRowId === "New" ? "New" : row.type, 'type', e.target.value)
-                    }
-                />
-            ) : (
-                row.type
-            ), sortable: true
-            , width: '6%'
-        },
-        { name: 'Last 10-K', selector: (row) => row.qtr, sortable: true, width: '7%' },
         { name: 'Exchange', selector: (row) => row.exchange, sortable: true, width: '7%' },
         {
             name: 'Ticker', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
                 <input
                     defaultValue={editRowId === "New" ? newRow.symbol || '' : row.symbol}
                     onBlur={(e) =>
-                        handleInputBlur(editRowId === "New" ? "New" : row.symbol, 'symbol', e.target.value)
+                        handleInputBlur(editRowId === "New" ? "New" : row.cik, 'symbol', e.target.value)
                     }
                 />
             ) : (
                 row.symbol
             ), sortable: true
             , width: '7%'
+        },
+        { name: 'Last 10-K', selector: (row) => row.qtr, sortable: true, width: '7%' },
+        {
+            name: 'Pick', selector: (row) => (
+                <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                        const newValue = row.type === 'pick' ? null : 'pick';
+                        handleInputBlur(row.cik, 'type', newValue);
+                    }}
+
+                >
+                    {row.type === 'pick' ? (
+                        <span role="img" aria-label="star" style={{ color: 'gold', fontSize: '1rem' }}>
+                            ❤
+                        </span>
+                    ) : (
+                        <span role="img" aria-label="star-outline" style={{ color: 'gray', fontSize: '1rem' }}>
+                            🤍
+                        </span>
+                    )}
+                </div>
+            ), sortable: true
+            , width: '6%'
         },
         {
             name: 'Actions',
@@ -222,7 +263,7 @@ const CompanyMapping = () => {
 
     return (
         <div>
-            <h1>Company Mapping</h1>
+            <h1 className="font-sans mb-1">Company Mapping</h1>
             <div className="mb-4">
                 <input
                     type="text"
@@ -238,6 +279,7 @@ const CompanyMapping = () => {
             >
                 Add New Row
             </button>
+            <span className="link text-sm"> &nbsp; Edgar Company Search 👉 <a href="https://www.sec.gov/search-filings" target='new'>https://www.sec.gov/search-filings</a></span>
             <DataTable
                 columns={columns}
                 data={editRowId === 'New' ? [newRow, ...filteredData] : filteredData}

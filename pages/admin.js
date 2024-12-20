@@ -1,12 +1,12 @@
 import React from 'react'
 import { AdminMain } from '@/components';
-import { checkDatabaseConnection } from '../services';
+import { checkDatabaseConnection, getSectors } from '../services';
 import { useGlobalState } from '@/state';
 import Image from 'next/image';
 
-const AdminPage = (env) => {
+const AdminPage = ({ env, sectors }) => {
     //const envSelected = useGlobalState('Env')[0];
-    //console.log(env.env)
+    //console.log(sectors)
     if (env.env == "disconnected") {
         return (
 
@@ -25,7 +25,7 @@ const AdminPage = (env) => {
             <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
 
                 <div>
-                    <AdminMain></AdminMain>
+                    <AdminMain sectors={sectors}></AdminMain>
                 </div>
             </div >
         )
@@ -36,7 +36,8 @@ export default AdminPage
 
 export async function getServerSideProps() {
     const env = (await checkDatabaseConnection()) || [];
+    const sectors = (await getSectors()) || [];
     return {
-        props: { env }
+        props: { env, sectors }
     }
 }

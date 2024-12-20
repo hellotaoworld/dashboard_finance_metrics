@@ -1,9 +1,9 @@
 import React from 'react'
 import CompanyMapping from './Admin_CompanyMapping'
 
-const AdminMapping = () => {
+const AdminMapping = ({ sectors }) => {
     return (
-        <div><CompanyMapping></CompanyMapping></div>
+        <div><CompanyMapping sectors={sectors}></CompanyMapping></div>
     )
 }
 

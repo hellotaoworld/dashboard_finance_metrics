@@ -172,3 +172,37 @@ table {
   width: 100% !important;
   height: auto !important;
 }
+
+/* Default link styling */
+.link a {
+  color: #007BFF;
+  /* Primary blue color */
+  text-decoration: none;
+  /* Remove underline */
+  font-weight: 500;
+  /* Medium font weight */
+}
+
+/* Hover state */
+.link a:hover {
+  color: #0056b3;
+  /* Darker blue on hover */
+  text-decoration: underline;
+  /* Add underline on hover for clarity */
+  transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+  /* Smooth transition */
+}
+
+/* Focus state for accessibility */
+.link a:focus {
+  outline: 2px dashed #0056b3;
+  /* Add focus outline for accessibility */
+  outline-offset: 2px;
+  /* Space between outline and text */
+}
+
+/* Visited link styling (optional) */
+.link a:visited {
+  color: #6c757d;
+  /* Muted color for visited links */
+}

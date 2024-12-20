@@ -4,8 +4,8 @@ import AdminRefresh from './Admin_Refresh'
 import AdminMapping from './Admin_Mapping';
 
 
-const AdminMain = ({ companypick }) => {
-
+const AdminMain = ({ sectors }) => {
+    //console.log(sectors)
     return (
         <Tabs aria-label="Graphs" className='my-4'>
             <Tab key="refresh" title="Data Load">
@@ -13,7 +13,7 @@ const AdminMain = ({ companypick }) => {
                 <AdminRefresh></AdminRefresh>
             </Tab>
             <Tab key="Mapping" title="Mapping">
-                <AdminMapping></AdminMapping>
+                <AdminMapping sectors={sectors}></AdminMapping>
             </Tab>
 
         </Tabs>
