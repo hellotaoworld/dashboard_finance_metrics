@@ -204,7 +204,16 @@ const CompanyMapping = ({ sectors }) => {
             ), sortable: true
             , width: '30%'
         },
-        { name: 'Exchange', selector: (row) => row.exchange, sortable: true, width: '7%' },
+        {
+            name: 'Exchange', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
+                <input
+                    defaultValue={editRowId === "New" ? newRow.exchange || '' : row.exchange}
+                    onBlur={(e) =>
+                        handleInputBlur(editRowId === "New" ? "New" : row.cik, 'exchange', e.target.value)
+                    }
+                />
+            ) : (row.exchange), sortable: true, width: '7%'
+        },
         {
             name: 'Ticker', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
                 <input
