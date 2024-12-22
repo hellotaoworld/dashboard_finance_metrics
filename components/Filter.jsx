@@ -27,7 +27,7 @@ const Filter = ({ sectors, status }) => {
     return (
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-2">
             <Autocomplete className="max-w-md"
-                label="Select a sector"
+                label="Select an industry"
                 defaultItems={sectors}
                 defaultSelectedKey={useGlobalState("Sector")[0]} onSelectionChange={SectorHandler} >
 

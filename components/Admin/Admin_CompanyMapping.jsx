@@ -40,14 +40,14 @@ const CompanyMapping = ({ sectors }) => {
             .catch((error) => console.error('Error fetching data:', error));
     }, [])
 
-    useEffect(() => {
-        fetch(`/api/mapping/getcompany`)
-            .then(res => res.json())
-            .then(value => {
-                setData(value);
-            })
-            .catch((error) => console.error('Error fetching data:', error));
-    }, [])
+    // useEffect(() => {
+    //     fetch(`/api/mapping/getcompany`)
+    //         .then(res => res.json())
+    //         .then(value => {
+    //             setData(value);
+    //         })
+    //         .catch((error) => console.error('Error fetching data:', error));
+    // }, [])
 
     // Handle edit/save action
     const handleEdit = (id) => {
@@ -152,6 +152,8 @@ const CompanyMapping = ({ sectors }) => {
     // Filter data based on search term
     const filteredData = data.filter((row) =>
         row.company_name.toLowerCase().includes(searchTerm.toLowerCase())
+        || row.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+        || row.sector.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Columns for DataTable
@@ -183,7 +185,7 @@ const CompanyMapping = ({ sectors }) => {
             , width: '20%'
         },
         {
-            name: 'Sector', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
+            name: 'Industry', selector: (row) => editRowId === row.cik || (editRowId === "New" && row === newRow) ? (
 
                 <select
                     className='w-full border rounded px-2 py-1'
@@ -295,7 +297,7 @@ const CompanyMapping = ({ sectors }) => {
             <div className="mb-4">
                 <input
                     type="text"
-                    placeholder="Search by company name..."
+                    placeholder="Search by company name, ticker or industry ..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="border p-2 rounded w-full"

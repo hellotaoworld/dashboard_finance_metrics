@@ -1,10 +1,11 @@
-import { Card, CardBody } from "@nextui-org/react"
+import { Card, CardBody, select } from "@nextui-org/react"
 import { useState, useEffect } from "react";
 import { Autocomplete, AutocompleteItem, Select, SelectItem, Badge } from "@nextui-org/react";
 
 
 const AdminRefresh = () => {
     const [companyList, setCompanyList] = useState([]);
+    const [pickcompanyList, setPickCompanyList] = useState([]);
     const [selectedCompanies, setSelectedCompanies] = useState(["All"]);
     const [selectedCompaniesName, setSelectedCompaniesName] = useState(["All"]);
     const [selectedYears, setSelectedYears] = useState(["All"]);
@@ -20,8 +21,18 @@ const AdminRefresh = () => {
         fetch('/api/companies/company')
             .then((res) => res.json())
             .then((value) => {
-                //console.log("Fetched company list:", value); // Debug log
                 setCompanyList(value); // Ensure value is an array
+            })
+            .catch((error) => {
+                console.error("Error fetching companies:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        fetch('/api/companies/companypick')
+            .then((res) => res.json())
+            .then((value) => {
+                setPickCompanyList(value[0]); // Ensure value is an array
             })
             .catch((error) => {
                 console.error("Error fetching companies:", error);
@@ -63,6 +74,12 @@ const AdminRefresh = () => {
     const resetCompanySelection = () => {
         setSelectedCompanies(['All']);
         setSelectedCompaniesName(['All']);
+    };
+
+
+    const pickCompanySelection = () => {
+        const pickArray = pickcompanyList.cik.split(',');
+        setSelectedCompanies(pickArray);
     };
 
 
@@ -232,6 +249,12 @@ const AdminRefresh = () => {
                         onClick={resetCompanySelection}
                     >
                         Reset
+                    </button>
+                    <button
+                        className="bg-default-400 text-default-100 px-4 py-2 m-4 rounded hover:bg-default-500"
+                        onClick={pickCompanySelection}
+                    >
+                        All Pick!
                     </button>
                     <p className="text-small text-default-500">Company Selected: {selectedCompaniesName.join(', ')}</p>
 

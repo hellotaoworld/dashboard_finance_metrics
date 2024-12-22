@@ -51,7 +51,7 @@ const Sidebar = () => {
                             className={tabSelected == 1 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
                             onClick={(e) => { setGlobalState('Tab', 1) }}>
                             <span className='sidebar_icon'><VscTelescope /></span>
-                            <span className='sidebar_name'>Sector Overview</span>
+                            <span className='sidebar_name'>Industry Overview</span>
                         </Link>
                     </li>
                     <li className='sidebar_item'>

@@ -115,6 +115,22 @@ export const getCompanyPick = async () => {
     }
 }
 
+export const getCompanyRealPick = async () => {
+    let connection;
+    try {
+        const query = "SELECT group_concat(cik) as cik FROM valuation_engine_mapping_company where type ='pick'"
+        connection = await createConnection();
+        const result = await connection.execute(query)
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+}
+
 
 
 export const getCompanies = async (v_sector) => {
