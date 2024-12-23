@@ -16,8 +16,8 @@ const SectorPage = ({ sectors }) => {
                 <div>
                     <Filter sectors={sectors} status={0}></Filter>
                 </div>
-                <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image>
-                <h2 className='justify-self-center my-10 text-3xl font-medium justify-self-center'>💬 To start, please select a sector from filter above </h2>
+                {/* <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image> */}
+                <h2 className='justify-self-stretch mx-72 my-10 text-xl font-bold'>👆 &nbsp;To start, please select an industry above </h2>
 
             </div >
         )

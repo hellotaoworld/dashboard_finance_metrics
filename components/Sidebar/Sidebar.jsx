@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import { VscTelescope, VscInfo, VscGraphLine, VscChevronRight, VscChevronLeft, VscLock, VscHome } from "react-icons/vsc";
+import { VscTelescope, VscInfo, VscGraphLine, VscChevronRight, VscChevronLeft, VscLock, VscHome, VscQuestion } from "react-icons/vsc";
 import { BsFillMoonFill, BsSunFill } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import { useGlobalState, setGlobalState } from '@/state';
@@ -39,6 +39,14 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li className='sidebar_item'>
+                        <Link href="/sector"
+                            className={tabSelected == 1 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
+                            onClick={(e) => { setGlobalState('Tab', 1) }}>
+                            <span className='sidebar_icon'><VscTelescope /></span>
+                            <span className='sidebar_name'>Industry Overview</span>
+                        </Link>
+                    </li>
+                    <li className='sidebar_item'>
                         <Link href="/company"
                             className={tabSelected == 2 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
                             onClick={(e) => { setGlobalState('Tab', 2) }}>
@@ -47,11 +55,11 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li className='sidebar_item'>
-                        <Link href="/sector"
-                            className={tabSelected == 1 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
-                            onClick={(e) => { setGlobalState('Tab', 1) }}>
-                            <span className='sidebar_icon'><VscTelescope /></span>
-                            <span className='sidebar_name'>Industry Overview</span>
+                        <Link href="/about"
+                            className={tabSelected == 4 ? "sidebar_link text-default-900 bg-default-200" : "sidebar_link text-default-900 bg-default-primary-50"}
+                            onClick={(e) => { setGlobalState('Tab', 4) }}>
+                            <span className='sidebar_icon'><VscQuestion /></span>
+                            <span className='sidebar_name'>About Us</span>
                         </Link>
                     </li>
                     <li className='sidebar_item'>

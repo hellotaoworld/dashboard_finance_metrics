@@ -14,7 +14,7 @@ const Pick = ({ companies }) => {
     }
 
     return (
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-2">
+        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-5 justify-center">
 
             <Autocomplete className="max-w-md"
                 label="Start by Searching a Company"
@@ -26,7 +26,7 @@ const Pick = ({ companies }) => {
                 ))}
             </Autocomplete>
 
-            <button className="bg-default-500 text-white px-2 my-2 rounded hover:bg-default-600"><Link href="/company" onClick={(e) => { setGlobalState('Tab', 2) }}>Start</Link></button>
+            <button className="bg-default-500 text-white px-2 my-2 rounded hover:bg-default-600 text-sm"><Link href="/company" onClick={(e) => { setGlobalState('Tab', 2) }}>Start</Link></button>
 
         </div>
 
