@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react'
 import Image from 'next/image';
 import { getSectors } from '../services';
@@ -10,31 +11,37 @@ const CompanyPage = ({ sectors }) => {
     const companySelected = useGlobalState('Company')[0];
     if (sectorSelected == "" | companySelected == "" | sectors == null) {
         return (
-
-            <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
-                <div>
-                    <Filter sectors={sectors}></Filter>
-                </div>
-                {/* <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image> */}
-                <h2 className='justify-self-stretch mx-72 my-10 my-10 text-xl font-bold'>👆 &nbsp;To start, please select an industry and a company above </h2>
-            </div >
-
+            <main>
+                <Head><title>Valuation Engine</title>
+                    <link rel="icon" href="/avatar2.png" />
+                </Head>
+                <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
+                    <div>
+                        <Filter sectors={sectors}></Filter>
+                    </div>
+                    {/* <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image> */}
+                    <h2 className='justify-self-stretch mx-72 my-10 my-10 text-xl font-bold'>👆 &nbsp;To start, please select an industry and a company above </h2>
+                </div >
+            </main>
         )
 
 
     }
     else {
         return (
-
-            <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
-                <div>
-                    <Filter sectors={sectors}></Filter>
-                </div>
-                <div>
-                    <CompanyMain sector={sectorSelected} company={companySelected}></CompanyMain>
-                </div>
-            </div >
-
+            <main>
+                <Head><title>Valuation Engine</title>
+                    <link rel="icon" href="/avatar2.png" />
+                </Head>
+                <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
+                    <div>
+                        <Filter sectors={sectors}></Filter>
+                    </div>
+                    <div>
+                        <CompanyMain sector={sectorSelected} company={companySelected}></CompanyMain>
+                    </div>
+                </div >
+            </main>
         )
     }
 

@@ -7,7 +7,7 @@ import Favourite from '@/components/Favourite';
 export default function Home({ companypick }) {
   return (
     <main>
-      <Head><title>Valuation Engine Dashboard</title>
+      <Head><title>Valuation Engine</title>
         <link rel="icon" href="/avatar2.png" />
       </Head>
       <div className='my-3 mb-72'></div>

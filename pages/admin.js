@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from 'next/head';
 import { AdminMain } from '@/components';
 import { checkDatabaseConnection, getSectors } from '../services';
 import { useGlobalState } from '@/state';
@@ -9,22 +10,32 @@ const AdminPage = ({ env, sectors }) => {
     console.log(env)
     if (env == "connected") {
         return (
-            <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
+            <main>
+                <Head><title>Valuation Engine</title>
+                    <link rel="icon" href="/avatar2.png" />
+                </Head>
+                <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
 
-                <div>
-                    <AdminMain sectors={sectors}></AdminMain>
-                </div>
-            </div >
+                    <div>
+                        <AdminMain sectors={sectors}></AdminMain>
+                    </div>
+                </div >
+            </main>
         )
     }
     else {
         return (
-            <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
+            <main>
+                <Head><title>Valuation Engine</title>
+                    <link rel="icon" href="/avatar2.png" />
+                </Head>
+                <div className='container grid grid-rows-subgrid gap-4 row-span-2'>
 
-                <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image>
-                <h2 className='justify-self-center my-10 text-3xl font-medium justify-self-center'>No Access </h2>
+                    <Image className="justify-self-center my-3" src="/missing_values.png" alt="missing value" width={500} height={500}></Image>
+                    <h2 className='justify-self-center my-10 text-3xl font-medium justify-self-center'>No Access </h2>
 
-            </div >
+                </div >
+            </main>
         )
     }
 }
