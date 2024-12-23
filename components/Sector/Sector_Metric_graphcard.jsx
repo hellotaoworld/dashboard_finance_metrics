@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/react"
 import Sector_Metric_linegraph from './Sector_Metric_linegraph'
 import Sector_Metric_top10 from './Sector_Metric_top10'
 
-const Sector_Metric_graphcard = ({ input, metric, rank }) => {
+const Sector_Metric_graphcard = ({ input, metric, rank, year }) => {
 
     return (
         <Card>
@@ -17,7 +17,7 @@ const Sector_Metric_graphcard = ({ input, metric, rank }) => {
             <CardBody>
                 <div className='grid grid-cols-3 gap-2'>
                     <div className='col-span-2'><Sector_Metric_linegraph input={input} type={metric[2]}></Sector_Metric_linegraph></div>
-                    <div><Sector_Metric_top10 rank={rank}></Sector_Metric_top10></div>
+                    <div><Sector_Metric_top10 rank={rank} year={year}></Sector_Metric_top10></div>
                 </div>
             </CardBody>
         </Card>

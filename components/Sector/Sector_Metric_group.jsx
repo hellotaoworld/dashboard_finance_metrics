@@ -2,7 +2,7 @@ import React from 'react'
 import Sector_Metric_graphcard from './Sector_Metric_graphcard'
 import { Tabs, Tab } from '@nextui-org/react';
 
-const Sector_Metric_group = ({ metricList, metricDetails, sectorDetails }) => {
+const Sector_Metric_group = ({ metricList, metricDetails, sectorDetails, year }) => {
     const metricGroup = [...new Set(metricList.map(metricList => metricList.formula_category))]
     const metricFieldName = [...new Set(metricList.map(metricList => metricList.formula_shortname))]
     //const metricName = [...new Set(metricList.map(metricList => metricList.formula_name))]
@@ -35,7 +35,8 @@ const Sector_Metric_group = ({ metricList, metricDetails, sectorDetails }) => {
                                         <Sector_Metric_graphcard
                                             input={metricData.filter(metricData => metricData.key == item.formula_shortname)[0].data}
                                             metric={[item.formula_name, item.formula_pseudo_code, item.formula_type]}
-                                            rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}>
+                                            rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}
+                                            year={year}>
                                         </Sector_Metric_graphcard>
                                     </div>
                                 ))}

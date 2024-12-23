@@ -1,13 +1,13 @@
 import { RadioGroup, Radio } from '@nextui-org/react';
 import React, { useState } from 'react'
 
-const Sector_Metric_top10 = ({ rank }) => {
-    //const currentYear = new Date().getFullYear();
-    const yearlist = [...new Set(rank.map(rank => rank.report_year))]
-    const defaultyear = Math.max(...yearlist);
-    //const [year, setYear] = useState(currentYear);
-    const [innerYear, setYear] = useState();
-    const year = innerYear ?? defaultyear;
+const Sector_Metric_top10 = ({ rank, year }) => {
+    // //const currentYear = new Date().getFullYear();
+    // const yearlist = [...new Set(rank.map(rank => rank.report_year))]
+    // const defaultyear = Math.max(...yearlist);
+    // //const [year, setYear] = useState(currentYear);
+    // const [innerYear, setYear] = useState(v_year);
+    // const year = innerYear ?? defaultyear;
 
     const [sortOrder, setsortOrder] = useState('top');
 
@@ -16,12 +16,8 @@ const Sector_Metric_top10 = ({ rank }) => {
         <div
             className="block rounded-lg bg-white dark:bg-neutral-700 mx-1 my-1">
             <div className="border-b-1 border-neutral-100 py-2 dark:border-neutral-600 dark:text-neutral-50">
+                {year}
                 <p className="leading-tight text-default-800">
-                    <select value={year} onChange={(e) => { setYear(e.target.value) }}>
-                        {yearlist.map((y, i) => (
-                            <option key={i}>{y}</option>
-                        ))}
-                    </select>
                     <RadioGroup label="" orientation="horizontal" value={sortOrder} className='gap-1' onValueChange={setsortOrder}>
                         <Radio value="top">Top 5</Radio>
                         <Radio value="bottom">Bottom 5</Radio>

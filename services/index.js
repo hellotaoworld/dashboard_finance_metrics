@@ -118,7 +118,7 @@ export const getCompanyPick = async () => {
 export const getCompanyRealPick = async () => {
     let connection;
     try {
-        const query = "SELECT group_concat(cik) as cik FROM valuation_engine_mapping_company where type ='pick'"
+        const query = "SELECT group_concat(cik) as cik, group_concat(company) as company_name FROM valuation_engine_mapping_company where type ='pick'"
         connection = await createConnection();
         const result = await connection.execute(query)
         //console.log(result[0])

@@ -78,8 +78,11 @@ const AdminRefresh = () => {
 
 
     const pickCompanySelection = () => {
-        const pickArray = pickcompanyList.cik.split(',');
-        setSelectedCompanies(pickArray);
+        console.log(pickcompanyList)
+        const cikArray = pickcompanyList.cik.split(',');
+        const nameArray = pickcompanyList.company_name.split(',');
+        setSelectedCompanies(cikArray);
+        setSelectedCompaniesName(nameArray);
     };
 
 
