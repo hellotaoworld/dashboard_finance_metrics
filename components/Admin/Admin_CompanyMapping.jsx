@@ -111,7 +111,7 @@ const CompanyMapping = ({ sectors }) => {
                 );
             };
         }
-        if (field === "type") {
+        if (field === "type" || field === "type_fav") {
             const updatedRow = { ...data.find((row) => row.cik === id), [field]: value };
             axios
                 .put('/api/mapping/updatecompany', { id, data: updatedRow })
@@ -132,7 +132,8 @@ const CompanyMapping = ({ sectors }) => {
             type: null,
             qtr: null,
             exchange: null,
-            symbol: null
+            symbol: null,
+            type_fav: null
         };
         setNewRow(defaultNewRow);
         setEditRowId('New');
@@ -231,6 +232,34 @@ const CompanyMapping = ({ sectors }) => {
         },
         { name: 'Last 10-K', selector: (row) => row.qtr, sortable: true, width: '7%' },
         {
+            name: 'Love', selector: (row) => (
+                <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                        const newValue = row.type_fav === 'yes' ? null : 'yes';
+                        handleInputBlur(row.cik, 'type_fav', newValue);
+                    }}
+
+                >
+                    {row.type_fav === 'yes' ? (
+                        <span role="img" aria-label="star" style={{ color: 'gold', fontSize: '1rem' }}>
+                            ❤
+                        </span>
+                    ) : (
+                        <span role="img" aria-label="star-outline" style={{ color: 'gray', fontSize: '1rem' }}>
+                            🤍
+                        </span>
+                    )}
+                </div>
+            ), sortable: true
+            , sortFunction: (rowA, rowB) => {
+                const typeA = rowA.type_fav === 'yes' ? 1 : 0; // Convert 'pick' to 1 and others to 0
+                const typeB = rowB.type_fav === 'yes' ? 1 : 0;
+                return typeA - typeB; // Sort ascending (0 before 1)
+            }
+            , width: '6%'
+        },
+        {
             name: 'Pick', selector: (row) => (
                 <div
                     className="cursor-pointer"
@@ -242,16 +271,20 @@ const CompanyMapping = ({ sectors }) => {
                 >
                     {row.type === 'pick' ? (
                         <span role="img" aria-label="star" style={{ color: 'gold', fontSize: '1rem' }}>
-                            ❤
+                            ✔
                         </span>
                     ) : (
                         <span role="img" aria-label="star-outline" style={{ color: 'gray', fontSize: '1rem' }}>
-                            🤍
+                            ⬜
                         </span>
                     )}
                 </div>
             ), sortable: true
-            , width: '6%'
+            , sortFunction: (rowA, rowB) => {
+                const typeA = rowA.type === 'pick' ? 1 : 0; // Convert 'pick' to 1 and others to 0
+                const typeB = rowB.type === 'pick' ? 1 : 0;
+                return typeA - typeB; // Sort ascending (0 before 1)
+            }, width: '6%'
         },
         {
             name: 'Actions',
@@ -309,6 +342,7 @@ const CompanyMapping = ({ sectors }) => {
             >
                 Add New Row
             </button>
+
             <span className="link text-sm"> &nbsp; Edgar Company Search 👉 <a href="https://www.sec.gov/search-filings" target='new'>https://www.sec.gov/search-filings</a></span>
             <DataTable
                 columns={columns}

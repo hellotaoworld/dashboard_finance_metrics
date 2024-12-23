@@ -102,7 +102,7 @@ export const getSectorDetails = async (v_sector) => {
 export const getCompanyPick = async () => {
     let connection;
     try {
-        const query = "SELECT distinct company as company_name, industry as sector, cik, sic, type, fye, qtr, exchange, symbol FROM valuation_engine_mapping_company order by company_name"
+        const query = "SELECT distinct company as company_name, industry as sector, cik, sic, type, fye, qtr, exchange, symbol, type_fav FROM valuation_engine_mapping_company order by company_name"
         connection = await createConnection();
         const result = await connection.execute(query)
         //console.log(result[0])
@@ -119,6 +119,22 @@ export const getCompanyRealPick = async () => {
     let connection;
     try {
         const query = "SELECT group_concat(cik) as cik, group_concat(company) as company_name FROM valuation_engine_mapping_company where type ='pick'"
+        connection = await createConnection();
+        const result = await connection.execute(query)
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+}
+
+export const getCompanyFav = async () => {
+    let connection;
+    try {
+        const query = "SELECT group_concat(cik) as cik, group_concat(company) as company_name FROM valuation_engine_mapping_company where type_fav =1"
         connection = await createConnection();
         const result = await connection.execute(query)
         //console.log(result[0])
@@ -299,7 +315,8 @@ export const updateCompanyMapping = async (v_company, cik) => {
                     industry = ?,\
                     type = ?,\
                     exchange = ?,\
-                    symbol = ?\
+                    symbol = ?, \
+                    type_fav = ? \
                 WHERE cik = ?;"
         const params = [
             v_company.company_name,
@@ -308,6 +325,7 @@ export const updateCompanyMapping = async (v_company, cik) => {
             v_company.type,
             v_company.exchange,
             v_company.symbol,
+            v_company.type_fav,
             cik
         ]
         connection = await createConnection();
@@ -328,8 +346,8 @@ export const insertCompanyMapping = async (v_company) => {
     let connection;
     try {
         const query = "INSERT INTO valuation_engine_mapping_company \
-                    (cik, company, sic, industry, type, exchange, symbol) \
-                    VALUES(?, ?, ?, ?, ?, ?, ?)"
+                    (cik, company, sic, industry, type, exchange, symbol, type_fav) \
+                    VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
         const params = [
             v_company.cik,
             v_company.company_name,
@@ -337,7 +355,8 @@ export const insertCompanyMapping = async (v_company) => {
             v_company.sector,
             v_company.type,
             v_company.exchange,
-            v_company.symbol
+            v_company.symbol,
+            v_company.type_fav,
         ]
         connection = await createConnection();
         const result = await connection.execute(query, params)
