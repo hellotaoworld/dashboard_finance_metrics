@@ -76,7 +76,7 @@ const CompanyMapping = ({ sectors }) => {
 
     // Handle delete action
     const handleDelete = (id) => {
-        console.log(id);
+        //console.log(id);
         if (window.confirm('Are you sure you want to delete this row?')) {
             axios
                 .delete('/api/mapping/deletecompany', { data: { id } })
@@ -89,6 +89,10 @@ const CompanyMapping = ({ sectors }) => {
     const handleInputBlur = (id, field, value) => {
         if (id === "New") {
             setNewRow((prevRow) => ({ ...prevRow, [field]: value }));
+            if (field === "sector") {
+                const sic = sectors.find((item) => item.company_sector === value).sic;
+                setNewRow((prevRow) => ({ ...prevRow, ["sic"]: sic }));
+            }
         } else {
             if (field === "sector") {
                 setData((prevData) =>
@@ -97,6 +101,7 @@ const CompanyMapping = ({ sectors }) => {
                     )
                 );
                 const sic = sectors.find((item) => item.company_sector === value).sic;
+                //console.log(sic);
                 setData((prevData) =>
                     prevData.map((row) =>
                         row.cik === id ? { ...row, ["sic"]: sic } : row

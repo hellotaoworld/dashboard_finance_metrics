@@ -39,7 +39,7 @@ const createConnection = async () => {
 export const getSectors = async () => {
     let connection;
     try {
-        const query = "SELECT distinct industry as company_sector, sic FROM valuation_engine_mapping_company order by industry"
+        const query = "SELECT distinct industry as company_sector, sic FROM valuation_engine_mapping_company where sic is not null order by industry"
         connection = await createConnection();
         const result = await connection.execute(query)
         //console.log(result[0])
@@ -84,7 +84,7 @@ export const getSectorDetails = async (v_sector) => {
         from valuation_engine_metrics_ranking m \
         left join valuation_engine_mapping_formula f \
         on m.metric_name = f.formula_shortname \
-        where industry =? and m.report_year >=2012 \
+        where industry =? and m.report_year >=2012 and f.formula_category <>'Custom Ratio' \
         group by f.formula_type,f.formula_category,m.metric_name,f.formula_name, m.report_year"
         connection = await createConnection();
         const result = await connection.execute(query, [v_sector])
@@ -168,7 +168,7 @@ export const getCompanies = async (v_sector) => {
 export const getMetricList = async (v_sector) => {
     let connection;
     try {
-        const query = "SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM web_application.valuation_engine_metrics_ranking r inner join web_application.valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname inner join valuation_engine_mapping_company c on r.company_name = c.company where c.industry =? order by FIELD(f.formula_category,'Key Ratio','Profitability Ratio','Efficiency Ratio','Liquidity Ratio','Solvency Ratio','Miscellaneous Ratio');"
+        const query = "SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM web_application.valuation_engine_metrics_ranking r inner join web_application.valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname inner join valuation_engine_mapping_company c on r.company_name = c.company where c.industry =? and f.formula_category <>'Custom Ratio' order by FIELD(f.formula_category,'Key Ratio','Profitability Ratio','Efficiency Ratio','Liquidity Ratio','Solvency Ratio','Miscellaneous Ratio');"
         connection = await createConnection();
         const result = await connection.execute(query, [v_sector])
         //console.log(result[0])
@@ -184,7 +184,7 @@ export const getMetricList = async (v_sector) => {
 export const getMetricDetails = async (v_sector) => {
     let connection;
     try {
-        const query = "SELECT r.company_name as company_name,r.report_year as report_year,r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,f.formula_type,r.industry as company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.industry =? and r.report_year >=2012;"
+        const query = "SELECT r.company_name as company_name,r.report_year as report_year,r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,f.formula_type,r.industry as company_sector FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.industry =? and r.report_year >=2012 and f.formula_category <>'Custom Ratio';"
         connection = await createConnection();
         const result = await connection.execute(query, [v_sector])
         //console.log(result[0])
@@ -209,7 +209,7 @@ export const getCompanyOverview = async (v_company) => {
          group_concat(distinct c.symbol) as company_ticker,\
          group_concat(distinct c.fye) as fye, \
          group_concat(distinct c.cik) as cik, \
-         group_concat(distinct c.`exchange`)  as exchange\
+         group_concat(distinct c.exchange)  as exchange\
          FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_company c on r.cik=c.cik where \
          r.company_name =? and r.report_year >=2012 \
          GROUP BY r.industry,r.company_name, c.symbol;"
@@ -229,7 +229,7 @@ export const getCompanyOverview = async (v_company) => {
 export const getCompanyMetricList = async (v_company) => {
     let connection;
     try {
-        const query = "SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM valuation_engine_metrics_ranking r inner join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.company_name=? and r.report_year>=2012;"
+        const query = "SELECT distinct f.formula_shortname, f.formula_name, f.formula_pseudo_code, f.formula_category, f.formula_type FROM valuation_engine_metrics_ranking r inner join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.company_name=? and r.report_year>=2012 and f.formula_category <>'Custom Ratio';"
         connection = await createConnection();
         const result = await connection.execute(query, [v_company])
         //console.log(result[0])
@@ -263,7 +263,7 @@ export const getCompanyMetricDetails = async (v_company) => {
     let connection;
     try {
         const query = "SELECT r.company_name as 'company_name',r.report_year as 'report_year',r.metric_name,r.metric_value,r.metric_ranking,f.formula_category,f.formula_type,r.industry as company_sector \
-     FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.company_name=? and r.report_year >=2012;"
+     FROM valuation_engine_metrics_ranking r left join valuation_engine_mapping_formula f on r.metric_name = f.formula_shortname where r.company_name=? and r.report_year >=2012 and f.formula_category <>'Custom Ratio';"
         connection = await createConnection();
         const result = await connection.execute(query, [v_company])
         //console.log(result[0])
@@ -290,6 +290,7 @@ export const getCompanyRanking = async (v_company) => {
     r.metric_name = f.formula_shortname \
     where r.company_name =? \
     and report_year >= 2012 \
+    and f.formula_category <>'Custom Ratio' \
     and (metric_ranking <=3 or \
         metric_ranking >=(SELECT max(metric_ranking)-3 FROM valuation_engine_metrics_ranking sub where sub.report_year=report_year))\
     group by metric_ranking, report_year  \
@@ -392,4 +393,39 @@ export const deleteCompanyMapping = async (cik) => {
     }
 
 
+}
+
+export const getCompanyMarketDetails = async (v_company) => {
+    let connection;
+    try {
+        const query = "WITH industry_avg as (\
+        SELECT\
+        sic,\
+        min(metric_value) as min, \
+        max(metric_value) as max, \
+        round(avg(metric_value),2) as avg from web_application.valuation_engine_metrics_ranking \
+        where metric_name = 'pe_ratio'\
+        group by sic)\
+        SELECT r.company_name as company_name,\
+        r.metric_name,\
+        r.metric_value,\
+        r.metric_ranking,\
+        r.industry,\
+        industry_avg.avg as industry_avg, \
+        industry_avg.min as industry_min, \
+        industry_avg.max as industry_max \
+        FROM web_application.valuation_engine_metrics_ranking r  \
+        left join industry_avg on \
+        r.sic = industry_avg.sic\
+        where r.company_name=? and r.metric_name ='pe_ratio'"
+        connection = await createConnection();
+        const result = await connection.execute(query, [v_company])
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
 }

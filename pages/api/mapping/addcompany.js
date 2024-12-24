@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         try {
             const result = await insertCompanyMapping(data);
             res.status(201).json({ message: 'Record added successfully.' });
-            console.log(res);
+            //console.log(res);
 
         } catch (error) {
             console.error('Error updating record:', error);

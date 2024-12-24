@@ -10,12 +10,21 @@ const CompanyMain = ({ sector, company }) => {
     const [sectormetricList, setsectormetricList] = useState([]);
     const [sectorDetails, setsectorDetails] = useState([]);
     const [rankingstats, setRankingstats] = useState([]);
+    const [marketDetails, setmarketDetails] = useState([]);
 
     useEffect(() => {
         fetch(`/api/companies/overview/${encodeURIComponent(company)}`)
             .then(res => res.json())
             .then(value => {
                 setcompanyOverview(value[0]);
+            })
+    }, [company])
+
+    useEffect(() => {
+        fetch(`/api/companies/market/${encodeURIComponent(company)}`)
+            .then(res => res.json())
+            .then(value => {
+                setmarketDetails(value[0]);
             })
     }, [company])
 
@@ -75,7 +84,7 @@ const CompanyMain = ({ sector, company }) => {
 
             <div className='grid grid-rows-subgrid gap-4 row-span-3'>
                 <div className="grid grid-flow-col gap-4">
-                    <Company_Intro companyOverview={companyOverview}></Company_Intro>
+                    <Company_Intro companyOverview={companyOverview} marketDetails={marketDetails}></Company_Intro>
                 </div>
                 <div className="grid grid-cols-3 grid-flow-col gap-4">
                     <div className='grid grid-flow-col col-span-3 gap-4'>

@@ -28,13 +28,13 @@ const Sector_Metric_top10 = ({ rank, year }) => {
 
                 <tbody>
                     {sortOrder == 'top' ?
-                        rank.filter(rank => rank.report_year == year).sort((a, b) => b.metric_value - a.metric_value).slice(0, 5).map((rank, i) => (
+                        rank.filter(rank => rank.report_year == year).sort((a, b) => a.metric_ranking - b.metric_ranking).slice(0, 5).map((rank, i) => (
                             <tr key={i} className="w-full border-b-1 border-neutral-200 dark:border-default-300 border-opacity-500 px-6 py-3 dark:border-opacity-500">
                                 <td className='text-sm px-2' width={200}>{rank.company_name}</td>
                                 <td className='font-light text-sm'>{rank.formula_type == 'ratio' ? Math.round(rank.metric_value * 100) + "%" : rank.metric_value}</td>
                             </tr>
                         )) :
-                        rank.filter(rank => rank.report_year == year).sort((a, b) => a.metric_value - b.metric_value).slice(0, 5).map((rank, i) => (
+                        rank.filter(rank => rank.report_year == year).sort((a, b) => b.metric_ranking - a.metric_ranking).slice(0, 5).map((rank, i) => (
                             <tr key={i} className="w-full border-b-1 border-neutral-200 dark:border-default-300 border-opacity-500 px-6 py-3 dark:border-opacity-500">
                                 <td className='text-sm px-2' width={200}>{rank.company_name}</td>
                                 <td className='font-light text-sm'>{rank.formula_type == 'ratio' ? Math.round(rank.metric_value * 100) + "%" : rank.metric_value}</td>

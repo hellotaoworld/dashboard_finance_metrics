@@ -3,7 +3,7 @@ import { updateCompanyMapping } from "@/services";
 export default async function handler(req, res) {
     if (req.method === 'PUT') {
         const { id, data } = req.body;
-        //console.log(data);
+        console.log(data);
         if (!id || !data) {
             return res.status(400).json({ message: 'ID and data are required.' });
         }
