@@ -38,7 +38,7 @@ const Company_Intro = ({ companyOverview, marketDetails }) => {
                                     labels={({ datum }) => `${datum.name}: ${datum.y}`}
                                     height={200}
                                     maxDomain={{ y: marketDetails.industry_max }}
-                                    minDomain={{ y: marketDetails.industry_min }}
+                                    minDomain={0}
                                     padding={{
                                         bottom: 50,
                                         left: 150, // Adjusted to accommodate labels

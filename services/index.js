@@ -403,7 +403,7 @@ export const getCompanyMarketDetails = async (v_company) => {
         sic,\
         min(metric_value) as min, \
         max(metric_value) as max, \
-        round(avg(metric_value),2) as avg from web_application.valuation_engine_metrics_ranking \
+        round(avg(case when metric_value< 0 then 0 else metric_value end),2) as avg from web_application.valuation_engine_metrics_ranking \
         where metric_name = 'pe_ratio'\
         group by sic)\
         SELECT r.company_name as company_name,\
