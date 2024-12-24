@@ -77,7 +77,7 @@ export const getSectorDetails = async (v_sector) => {
         const query = "SELECT m.metric_name as `metric_name`, \
         m.report_year as `report_year`, \
         (case when f.formula_type='ratio' then avg(greatest(least(m.metric_value,2),-2)) else avg(m.metric_value) end) as `avg`, \
-        count(distinct m.company_name) as `company_count`, \
+        count(distinct m.cik) as `company_count`, \
         f.formula_category as formula_category, \
         f.formula_type, \
         f.formula_name \

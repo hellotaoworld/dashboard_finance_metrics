@@ -11,7 +11,8 @@ const Company_Metric_ranking = ({ rank, sector }) => {
     //console.log(sector)
     //const companyCount = sector.filter(sector => sector["report_year"] == year)
     //console.log(companyCount)
-    //console.log(sector)
+    //console.log(rank)
+
 
     return (
         <div
@@ -43,7 +44,7 @@ const Company_Metric_ranking = ({ rank, sector }) => {
                             <td>{r.metric_ranking <= 3 ? "🟢" : ""}
                                 {sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ?
                                     "" : (r.metric_ranking >= sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count - 3 && r.metric_ranking > 3 ? "🔻" : "")}</td>
-                            <td className='font-light text-sm'>{r.metric_ranking}/{sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ? "" : sector.filter(sector => sector["metric_name"] == r.metric_name)[i].company_count}</td>
+                            <td className='font-light text-sm'>{r.metric_ranking}/{sector.filter(sector => sector["metric_name"] == r.metric_name).length == 0 ? "" : sector.filter(sector => sector["metric_name"] == r.metric_name && sector['report_year'] == r.report_year)[0].company_count}</td>
 
 
                         </tr>
