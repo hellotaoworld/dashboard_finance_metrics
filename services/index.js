@@ -408,7 +408,7 @@ export const getCompanyMarketDetails = async (v_company) => {
         group by sic)\
         SELECT r.company_name as company_name,\
         r.metric_name,\
-        r.metric_value,\
+        (case when r.metric_value < 0 then 0 else r.metric_value end) as metric_value,\
         r.metric_ranking,\
         r.industry,\
         industry_avg.avg as industry_avg, \
@@ -420,6 +420,42 @@ export const getCompanyMarketDetails = async (v_company) => {
         where r.company_name=? and r.metric_name ='pe_ratio'"
         connection = await createConnection();
         const result = await connection.execute(query, [v_company])
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+}
+
+export const getSectorMarketDetails = async (v_sector) => {
+    let connection;
+    try {
+        const query = "WITH industry_avg as (\
+        SELECT r.sic,\
+            date_format(max(m.ddate),'%Y-%m-%d') as ddate, \
+            min(r.metric_value) as min,\
+            max(r.metric_value) as max,\
+            round(avg(case when r.metric_value < 0 then 0 else r.metric_value end), 2) as avg from web_application.valuation_engine_metrics_ranking r \
+            left join valuation_engine_inputs_market m on r.cik = m.cik  \
+        where r.metric_name = 'pe_ratio' and mapping='pe_ratio' \
+        group by sic)\
+        SELECT\
+        industry_avg.ddate, \
+        r.company_name as company_name,\
+        case when r.metric_value < 0 then 0 else r.metric_value end as pe_value,\
+        r.metric_ranking as pe_ranking,\
+        industry_avg.avg as industry_avg,\
+        industry_avg.min as industry_min,\
+        industry_avg.max as industry_max\
+        FROM web_application.valuation_engine_metrics_ranking r  \
+        left join industry_avg on\
+        r.sic = industry_avg.sic\
+        where r.industry=? and r.metric_name = 'pe_ratio'"
+        connection = await createConnection();
+        const result = await connection.execute(query, [v_sector])
         //console.log(result[0])
         return result[0]
     } catch (error) {

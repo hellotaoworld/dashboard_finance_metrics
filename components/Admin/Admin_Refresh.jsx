@@ -226,6 +226,56 @@ const AdminRefresh = () => {
 
     };
 
+    const PEUpdate = async () => {
+        setLogs([]); // Clear logs before starting
+
+        try {
+            const response = await fetch('/api/run-python-pe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    input3: selectedPyFolder,
+                    dbCredentials: {
+                        LOCALDB_HOST: process.env.LOCALDB_HOST,
+                        LOCALDB_USERNAME: process.env.LOCALDB_USERNAME,
+                        LOCALDB_PASSWORD: process.env.LOCALDB_PASSWORD,
+                        LOCALDB_NAME: process.env.LOCALDB_NAME,
+                        LOCALDB_PORT: process.env.LOCALDB_PORT,
+                        DB_HOST: process.env.DB_HOST,
+                        DB_USERNAME: process.env.DB_USERNAME,
+                        DB_PASSWORD: process.env.DB_PASSWORD,
+                        DB_NAME: process.env.DB_NAME,
+                        DB_PORT: process.env.DB_PORT,
+                    },
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to trigger script: ${response.statusText}`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const logLines = chunk
+                    .split('\n') // Split by newline
+                    .filter((line) => line.trim().startsWith('data:')) // Only process lines starting with 'data:'
+                    .map((line) => line.replace(/^data:\s*/, '').trim()); // Remove 'data:' prefix and trim
+
+                setLogs((prevLogs) => [...prevLogs, ...logLines]); // Append new logs to the existing ones
+            }
+        } catch (error) {
+            console.error('Error triggering script:', error);
+            setLogs(['Failed to execute script. Check console for details.']);
+        }
+
+    };
+
     return (
         <div className='grid grid-row-3 gap-3'>
             <div className='grid grid-cols-2 gap-2'>
@@ -311,16 +361,23 @@ const AdminRefresh = () => {
                         className="bg-blue-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-600"
                         onClick={startScript}
                     >
-                        Run Python Script
+                        Extract EDGAR
                     </button>
                     <div>
                         <button
-                            className="bg-pink-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-pink-600"
+                            className="bg-gray-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-gray-600"
                             onClick={CloudUpdate}
                         >
-                            Upload Data to Cloud
+                            Upload to Cloud
                         </button>
-
+                    </div>
+                    <div>
+                        <button
+                            className="bg-purple-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-purple-600"
+                            onClick={PEUpdate}
+                        >
+                            Extract PE Ratio
+                        </button>
                     </div>
 
 

@@ -42,3 +42,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Libraries to add
 npm install @patternfly/react-charts --save
 npm install victory
+npm install chartjs-plugin-datalabels

@@ -8,6 +8,7 @@ const SectorMain = ({ sector }) => {
     const [sectorOverview, setsectorOverview] = useState([]);
     const [metricDetails, setmetricDetails] = useState([]);
     const [metricList, setmetricList] = useState([]);
+    const [sectorMarketDetails, setsectorMarketDetails] = useState([]);
 
     const yearlist = [...new Set(metricDetails.map(metricDetails => metricDetails.report_year))].sort((a, b) => a - b)
     const defaultyear = Math.max(...yearlist);
@@ -48,6 +49,14 @@ const SectorMain = ({ sector }) => {
             })
     }, [sector])
 
+    useEffect(() => {
+        fetch(`/api/sectors/market/${sector}`)
+            .then(res => res.json())
+            .then(value => {
+                setsectorMarketDetails(value);
+            })
+    }, [sector])
+
     return (
         <div className='grid grid-rows-subgrid gap-4 row-span-3'>
             <div className="grid grid-flow-col gap-4">
@@ -67,7 +76,7 @@ const SectorMain = ({ sector }) => {
 
             <div className="grid grid-cols-3 grid-flow-col gap-4">
                 <div className='grid grid-flow-col col-span-3 gap-4'>
-                    <Sector_Metric_group metricList={metricList} metricDetails={metricDetails} sectorDetails={sectorDetails} year={year}>
+                    <Sector_Metric_group metricList={metricList} metricDetails={metricDetails} sectorDetails={sectorDetails} year={year} sectorMarketDetails={sectorMarketDetails}>
                     </Sector_Metric_group>
                 </div>
             </div>
