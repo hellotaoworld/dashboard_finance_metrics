@@ -9,6 +9,9 @@ const Company_Stats_statement = ({ input }) => {
     const year = innerYear ?? defaultyear;
 
     const statement = input.filter(input => input["report_year"] == year)
+    //const url = statement[0].url
+    //console.log(url.substring(0, url.lastIndexOf("/") + 1))
+    //console.log(url.substring(0, url.lastIndexOf("/") + 1))
     //console.log(input.filter(input => input["a.report_year"] == year))
 
     return (
@@ -24,6 +27,15 @@ const Company_Stats_statement = ({ input }) => {
             </div>
             <p>{year}</p>
             <ul className='list-none mx-2'>
+                <li>
+                    <span className='mx-1'>
+                        <Link isBlock showAnchorIcon href={!statement[0] ? null : (statement[0].url).substring(0, (statement[0].url).lastIndexOf("/") + 1) + statement[0].adsh + "-index.html"} target='_new' color="foreground" className='text-sm text-default-700'>
+                            ⭐Directory of Filing
+
+
+                        </Link>
+                    </span>
+                </li>
                 {statement.map((record, k) => (
                     <li key={k}>
                         {/* <p className=''>

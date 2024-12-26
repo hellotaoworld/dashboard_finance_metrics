@@ -246,7 +246,7 @@ export const getCompanyMetricList = async (v_company) => {
 export const getCompanyURL = async (v_company) => {
     let connection;
     try {
-        const query = "SELECT u.fy as report_year, u.stmt as statement, u.url as url, c.company as company_name FROM valuation_engine_urls u inner join valuation_engine_mapping_company c on u.cik = c.cik where c.company=? and u.fy>=2012 order by u.fy, u.URL ASC;"
+        const query = "SELECT u.fy as report_year, u.stmt as statement, u.url as url, c.company as company_name, u.adsh FROM valuation_engine_urls u inner join valuation_engine_mapping_company c on u.cik = c.cik where c.company=? and u.fy>=2012 order by u.fy, u.URL ASC;"
         connection = await createConnection();
         const result = await connection.execute(query, [v_company])
         //console.log(result[0])

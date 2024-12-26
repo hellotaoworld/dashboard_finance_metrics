@@ -8,7 +8,7 @@ const Sector_Metric_bargraph = ({ input }) => {
     const industryAverage = input[0]?.industry_avg ? parseFloat(input[0].industry_avg) : null;
     const dateUpdated = input[0]?.ddate ? input[0].ddate : null;
     const chartRef = useRef(null);
-    console.log(dateUpdated)
+    //console.log(dateUpdated)
     const { theme } = useTheme();
     const lineColor = theme === 'light' ? "darkblue" : "lightblue";
     const gridColor = theme === 'light' ? "#F4F4F5" : "#27272A";

@@ -132,6 +132,16 @@ const AdminRefresh = () => {
 
     //Trigger Python Script
     const startScript = async () => {
+        if (selectedCompanies.includes('All')) {
+            const confirmProceed = window.confirm(
+                "You have selected to refresh all companies. Are you sure you want to continue? This may take longer to process."
+            );
+
+            // Exit if the user cancels
+            if (!confirmProceed) {
+                return;
+            }
+        }
         setLogs([]); // Clear logs before starting
 
         try {
