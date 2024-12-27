@@ -43,3 +43,5 @@ Libraries to add
 npm install @patternfly/react-charts --save
 npm install victory
 npm install chartjs-plugin-datalabels
+npm install react-quill
+--- (optional) npm install @blocknote/core @blocknote/react @blocknote/mantine

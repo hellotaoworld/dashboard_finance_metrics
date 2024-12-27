@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Company_Intro from './Company_Intro'
 import Company_Stats_card from './Company_Stats_card';
 import Company_Metric_group from './Company_Metric_group';
+import Company_Notes from './Company_Notes';
 
 const CompanyMain = ({ sector, company }) => {
     const [companyOverview, setcompanyOverview] = useState([]);
@@ -11,6 +12,7 @@ const CompanyMain = ({ sector, company }) => {
     const [sectorDetails, setsectorDetails] = useState([]);
     const [rankingstats, setRankingstats] = useState([]);
     const [marketDetails, setmarketDetails] = useState([]);
+    const [noteDetails, setNoteDetails] = useState(null);
 
     useEffect(() => {
         fetch(`/api/companies/overview/${encodeURIComponent(company)}`)
@@ -71,6 +73,15 @@ const CompanyMain = ({ sector, company }) => {
             })
     }, [company])
 
+    useEffect(() => {
+        fetch(`/api/companies/notes/${encodeURIComponent(company)}`)
+            .then(res => res.json())
+            .then(value => {
+                setNoteDetails(value[0]);
+            })
+            .catch((error) => console.error('Error fetching notes:', error));
+    }, [company])
+
 
     //console.log(company);
     //console.log(companyOverview);
@@ -83,8 +94,12 @@ const CompanyMain = ({ sector, company }) => {
         <div>
 
             <div className='grid grid-rows-subgrid gap-4 row-span-3'>
-                <div className="grid grid-flow-col gap-4">
+                <div className="grid grid-flow-col gap-4 mb-3">
                     <Company_Intro companyOverview={companyOverview} marketDetails={marketDetails}></Company_Intro>
+                </div>
+
+                <div >
+                    <Company_Notes noteDetails={noteDetails} companyOverview={companyOverview} />
                 </div>
                 <div className="grid grid-cols-3 grid-flow-col gap-4">
                     <div className='grid grid-flow-col col-span-3 gap-4'>

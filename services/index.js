@@ -465,3 +465,62 @@ export const getSectorMarketDetails = async (v_sector) => {
         if (connection) await connection.end(); // Ensure connection is closed
     }
 }
+
+export const getCompanyNotes = async (v_company) => {
+    let connection;
+    try {
+        const query = "SELECT notes,  date_format(CONVERT_TZ(update_timestamp, 'UTC', 'America/Toronto'),'%Y-%m-%d %H:%M') as update_timestamp  from valuation_engine_notes where company = ?"
+        connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT,
+        });
+        const result = await connection.execute(query, [v_company])
+        //console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+}
+
+export const updateCompanyNotes = async (v_company) => {
+    let connection;
+    try {
+        //console.log('Updating company notes with:', v_company);
+        const query = `
+            INSERT INTO valuation_engine_notes (type, company, cik, sic, notes)
+            VALUES (?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+                company = VALUES (company),
+                type = VALUES(type),
+                notes = VALUES(notes)
+        `;
+        const params = [
+            v_company.type,
+            v_company.company,
+            v_company.cik,
+            v_company.sic,
+            v_company.notes || null
+        ];
+        connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT,
+        });
+        const [result] = await connection.execute(query, params);
+        //console.log(result);
+        return result; // Return the result
+    } catch (error) {
+        console.error("Error in:", error);
+        throw error; // Re-throw error for upstream handling
+    } finally {
+        if (connection) await connection.end(); // Ensure connection is closed
+    }
+};

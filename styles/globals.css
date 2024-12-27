@@ -206,3 +206,33 @@ table {
   color: #6c757d;
   /* Muted color for visited links */
 }
+
+/* Quill editor Style */
+.quill-container {
+  height: 400px;
+  /* Total height of the editor including the toolbar */
+  display: flex;
+  flex-direction: column;
+  /* Ensure toolbar and content stack vertically */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ql-toolbar {
+  flex-shrink: 0;
+  /* Prevent the toolbar from shrinking */
+  z-index: 1;
+  /* Keep the toolbar above the editor */
+  background-color: #f5f5f5;
+  /* Optional: Toolbar background */
+  border-bottom: 1px solid #ccc;
+  /* Optional: Toolbar border */
+}
+
+.ql-container {
+  flex-grow: 1;
+  /* Make the content area take up remaining space */
+  overflow-y: auto;
+  /* Enable vertical scrolling for the content */
+}

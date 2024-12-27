@@ -58,7 +58,7 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
 
     return (
         <div>
-            <Tabs aria-label="Graphs" className='my-4'>
+            <Tabs aria-label="Graphs" >
                 <Tab key={0} title="Trading View">
                     <Card>
                         <CardBody>
