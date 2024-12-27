@@ -469,7 +469,7 @@ export const getSectorMarketDetails = async (v_sector) => {
 export const getCompanyNotes = async (v_company) => {
     let connection;
     try {
-        const query = "SELECT notes,  date_format(CONVERT_TZ(update_timestamp, 'UTC', 'America/Toronto'),'%Y-%m-%d %H:%M') as update_timestamp  from valuation_engine_notes where company = ?"
+        const query = "SELECT notes,  date_format(CONVERT_TZ(update_timestamp, 'UTC', 'America/Toronto'),'%Y-%m-%d %H:%m') as update_timestamp  from valuation_engine_notes where company = ?"
         connection = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USERNAME,
