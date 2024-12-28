@@ -186,6 +186,65 @@ const AdminRefresh = () => {
             setLogs(['Failed to execute script. Check console for details.']);
         }
     };
+
+    const updateEngine = async () => {
+        if (selectedCompanies.includes('All')) {
+            const confirmProceed = window.confirm(
+                "You have selected to refresh all companies. Are you sure you want to continue? This may take longer to process."
+            );
+
+            // Exit if the user cancels
+            if (!confirmProceed) {
+                return;
+            }
+        }
+        setLogs([]); // Clear logs before starting
+
+        try {
+            const response = await fetch('/api/run-python-formula', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    input1: selectedCompanies,
+                    input2: selectedYears,
+                    input3: selectedPyFolder,
+                    dbCredentials: {
+                        host: process.env.LOCALDB_HOST,
+                        user: process.env.LOCALDB_USERNAME,
+                        password: process.env.LOCALDB_PASSWORD,
+                        database: process.env.LOCALDB_NAME,
+                        port: process.env.LOCALDB_PORT,
+                    },
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to trigger script: ${response.statusText}`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const logLines = chunk
+                    .split('\n') // Split by newline
+                    .filter((line) => line.trim().startsWith('data:')) // Only process lines starting with 'data:'
+                    .map((line) => line.replace(/^data:\s*/, '').trim()); // Remove 'data:' prefix and trim
+
+                setLogs((prevLogs) => [...prevLogs, ...logLines]); // Append new logs to the existing ones
+            }
+        } catch (error) {
+            console.error('Error triggering script:', error);
+            setLogs(['Failed to execute script. Check console for details.']);
+        }
+    };
+
+
+
     const CloudUpdate = async () => {
         setLogs([]); // Clear logs before starting
 
@@ -368,25 +427,34 @@ const AdminRefresh = () => {
                         /></p>
 
                     <button
-                        className="bg-blue-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-600"
+                        className="bg-blue-600 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-700"
                         onClick={startScript}
                     >
                         Extract EDGAR
-                    </button>
+                    </button> <span className="text-gray-500 text-sm mx-1">Full extract & refresh</span>
+                    <div>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-600"
+                            onClick={updateEngine}
+                        >
+                            Update Engine
+                        </button><span className="text-gray-500 text-sm mx-1">Refresh metrics and ranking only</span>
+                    </div>
+                    <div>
+                        <button
+                            className="bg-blue-400 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-500"
+                            onClick={PEUpdate}
+                        >
+                            Extract PE Ratio
+                        </button>
+                    </div>
+
                     <div>
                         <button
                             className="bg-gray-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-gray-600"
                             onClick={CloudUpdate}
                         >
-                            Upload to Cloud
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            className="bg-purple-500 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-purple-600"
-                            onClick={PEUpdate}
-                        >
-                            Extract PE Ratio
+                            Sync Cloud Data
                         </button>
                     </div>
 
