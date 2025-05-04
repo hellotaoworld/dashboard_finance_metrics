@@ -453,7 +453,7 @@ export const getSectorMarketDetails = async (v_sector) => {
         FROM web_application.valuation_engine_metrics_ranking r  \
         left join industry_avg on\
         r.sic = industry_avg.sic\
-        where r.industry=? and r.metric_name = 'pe_ratio'"
+        where r.industry=? and r.metric_name = 'pe_ratio' and r.report_year = year(curdate())"
         connection = await createConnection();
         const result = await connection.execute(query, [v_sector])
         //console.log(result[0])
