@@ -14,24 +14,33 @@ const Pick = ({ companies }) => {
     }
 
     return (
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-5 justify-center">
+        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 my-8 justify-center items-end">
 
-            <Autocomplete className="max-w-md"
-                label="Start by Searching a Company"
+            <Autocomplete
+                className="max-w-md"
+                label="Search for a Company"
                 defaultItems={companies}
-                defaultSelectedKey={useGlobalState("Company")[0]} onSelectionChange={CompanyHandler}>
-
+                defaultSelectedKey={useGlobalState("Company")[0]}
+                onSelectionChange={CompanyHandler}
+                size="lg"
+            >
                 {companies.map((company, i) => (
-                    <AutocompleteItem key={i} value={company.company_name}>{company.company_name}</AutocompleteItem>
+                    <AutocompleteItem key={i} value={company.company_name}>
+                        {company.company_name}
+                    </AutocompleteItem>
                 ))}
             </Autocomplete>
 
-            <button className="bg-default-500 text-white px-2 my-2 rounded hover:bg-default-600 text-sm"><Link href="/company" onClick={(e) => { setGlobalState('Tab', 2) }}>Start</Link></button>
+            <Link href="/company" onClick={(e) => { setGlobalState('Tab', 2) }}>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold 
+                                 py-3 px-8 rounded-lg text-lg transition-all duration-200 
+                                 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Start Analyzing →
+                </button>
+            </Link>
 
         </div>
-
     )
-
 }
 
 export default Pick

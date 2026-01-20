@@ -4,7 +4,6 @@ import { ChartBullet, ChartLabel, ChartThemeColor } from '@patternfly/react-char
 import { useState, useEffect } from 'react';
 
 const Company_Intro = ({ companyOverview, marketDetails }) => {
-    //console.log(marketDetails);
     if (!companyOverview) {
         return (<div>No data available</div>)
     }
@@ -41,7 +40,7 @@ const Company_Intro = ({ companyOverview, marketDetails }) => {
                                 minDomain={0}
                                 padding={{
                                     bottom: 50,
-                                    left: 130, // Adjusted to accommodate labels
+                                    left: 130,
                                     right: 200,
                                     top: 50
                                 }}
