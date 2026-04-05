@@ -130,7 +130,19 @@ const ComparePage = ({ sectors }) => {
                 </div>
 
                 {!bothSelected && (
-                    <h2 className='mx-2 my-6 text-xl font-bold'>👆 &nbsp;Select two companies above to compare their metrics</h2>
+                    <div className="flex justify-center mt-10">
+                        <div className="text-center max-w-sm">
+                            <div className="text-6xl mb-5">⚖️</div>
+                            <p className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Compare Two Companies</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                                {!companyA && !companyB
+                                    ? 'Select Company A and Company B from the pickers above to see a side-by-side breakdown of their financial metrics.'
+                                    : !companyA
+                                        ? 'Now select Company A to complete the comparison.'
+                                        : 'Now select Company B to complete the comparison.'}
+                            </p>
+                        </div>
+                    </div>
                 )}
 
                 {bothSelected && (
