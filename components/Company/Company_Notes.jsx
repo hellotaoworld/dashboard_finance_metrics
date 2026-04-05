@@ -57,16 +57,6 @@ const Company_Notes = ({ noteDetails, companyOverview }) => {
         }
     };
 
-    // useEffect(() => {
-    //     // Auto-save every 5 seconds
-    //     const autoSave = setInterval(() => {
-    //         uploadToDatabase(companyOverview);
-    //     }, 10000);
-
-    //     return () => clearInterval(autoSave);
-    // }, [companyOverview, content]);
-
-    //if (loading) return <p>Loading content...</p>;
 
     const HeaderWithButton = (
         <div className='mx-2'>

@@ -10,7 +10,7 @@ const AdminRefresh = () => {
     const [selectedCompaniesName, setSelectedCompaniesName] = useState(["All"]);
     const [selectedYears, setSelectedYears] = useState(["All"]);
 
-    const [selectedPyFolder, setPyFolder] = useState("D:/tao_project/valuation_engine/");
+    const [selectedPyFolder, setPyFolder] = useState(process.env.NEXT_PUBLIC_VALUATION_ENGINE_PATH || "D:/tao_project/valuation_engine/");
 
     const [logs, setLogs] = useState([]);
 
@@ -78,7 +78,6 @@ const AdminRefresh = () => {
 
 
     const pickCompanySelection = () => {
-        console.log(pickcompanyList)
         const cikArray = pickcompanyList.cik.split(',');
         const nameArray = pickcompanyList.company_name.split(',');
         setSelectedCompanies(cikArray);

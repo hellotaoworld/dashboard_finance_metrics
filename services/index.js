@@ -361,7 +361,6 @@ export const insertCompanyMapping = async (v_company) => {
         ]
         connection = await createConnection();
         const result = await connection.execute(query, params)
-        console.log(result[0])
         return result[0]
     } catch (error) {
         console.error("Error in:", error);

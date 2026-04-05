@@ -6,8 +6,6 @@ import { useGlobalState } from '@/state';
 import Image from 'next/image';
 
 const AdminPage = ({ env, sectors }) => {
-    //const envSelected = useGlobalState('Env')[0];
-    console.log(env)
     if (env == "connected") {
         return (
             <main>

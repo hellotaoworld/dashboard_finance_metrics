@@ -2,29 +2,51 @@ import React, { memo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
 import { VscTelescope, VscInfo, VscGraphLine, VscChevronRight, VscChevronLeft, VscLock, VscHome, VscQuestion } from "react-icons/vsc";
-import { BsFillMoonFill, BsSunFill } from 'react-icons/bs';
+import { RiExchangeLine } from 'react-icons/ri';
+import { BsFillMoonFill, BsSunFill, BsStarFill, BsTrash } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import { useGlobalState, setGlobalState } from '@/state';
+import { getFavourites, removeFavourite } from '@/state/favourites';
+import { useRouter } from 'next/router';
 
 const Sidebar = () => {
     const [isCollapsedSidebar, setisCollapsedSidebar] = useState(false);
     const { theme, setTheme } = useTheme();
     const path = typeof window !== 'undefined' ? window.location.pathname : undefined;
-    const mapping = { '/': 0, '/sector': 1, '/company': 2, '/admin': 3 }
+    const mapping = { '/': 0, '/sector': 1, '/company': 2, '/compare': 5, '/admin': 3 }
     const tabSelected = useGlobalState('Tab')[0];
+    const [favourites, setFavourites] = useState([]);
+    const router = useRouter();
 
     // Auto-collapse on small screens
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth < 1024) { // lg breakpoint
+            if (window.innerWidth < 1024) {
                 setisCollapsedSidebar(true);
             }
         };
 
-        handleResize(); // Check on mount
+        handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    useEffect(() => {
+        setFavourites(getFavourites());
+    }, [tabSelected]);
+
+    const openFavourite = (fav) => {
+        setGlobalState('Sector', fav.sector);
+        setGlobalState('Company', fav.company);
+        setGlobalState('Tab', 2);
+        router.push('/company');
+    };
+
+    const deleteFavourite = (e, company) => {
+        e.stopPropagation();
+        removeFavourite(company);
+        setFavourites(getFavourites());
+    };
 
     return (
         <div className='sidebar_wrapper'>
@@ -88,6 +110,18 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         <li className='sidebar_item'>
+                            <Link href="/compare"
+                                className={tabSelected == 5
+                                    ? "sidebar_link flex items-center space-x-3 px-4 py-3 rounded-lg text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 font-medium transition-all duration-200"
+                                    : "sidebar_link flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-default-200 transition-all duration-200"}
+                                onClick={(e) => { setGlobalState('Tab', 5) }}
+                                title="Compare Companies"
+                            >
+                                <span className='sidebar_icon text-xl'><RiExchangeLine /></span>
+                                <span className='sidebar_name'>Compare</span>
+                            </Link>
+                        </li>
+                        <li className='sidebar_item'>
                             <Link href="/about"
                                 className={tabSelected == 4
                                     ? "sidebar_link flex items-center space-x-3 px-4 py-3 rounded-lg text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 font-medium transition-all duration-200"
@@ -112,6 +146,32 @@ const Sidebar = () => {
                             </Link>
                         </li>
                     </ul>
+
+                    {favourites.length > 0 && (
+                        <div className='sidebar_name mt-4 pt-4 border-t border-gray-200 dark:border-gray-700'>
+                            <p className='px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1'>
+                                <BsStarFill className='text-yellow-400' /> Favourites
+                            </p>
+                            <ul className='space-y-1'>
+                                {favourites.map((fav, i) => (
+                                    <li key={i}
+                                        className='flex items-center justify-between px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-default-200 cursor-pointer transition-all duration-200'
+                                        onClick={() => openFavourite(fav)}
+                                        title={fav.company}
+                                    >
+                                        <span className='sidebar_name text-sm truncate'>{fav.company}</span>
+                                        <button
+                                            onClick={(e) => deleteFavourite(e, fav.company)}
+                                            className='text-gray-400 hover:text-red-400 ml-2 flex-shrink-0'
+                                            title='Remove'
+                                        >
+                                            <BsTrash size={12} />
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </nav>
 
                 <div className='sidebar_menu mt-auto p-4 border-t border-gray-200 dark:border-gray-700'>

@@ -7,10 +7,9 @@ import { setGlobalState } from '@/state'
 const Layout = ({ children }) => {
     useEffect(() => {
         const path = window.location.pathname; // Pathname only
-        const mapping = { '/': 0, '/sector': 1, '/company': 2 }
+        const mapping = { '/': 0, '/sector': 1, '/company': 2, '/admin': 3, '/compare': 5 }
         setGlobalState('Tab', mapping[path])
     }, []);
-    //console.log('render layout')
     return (
         <>
 

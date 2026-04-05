@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardBody, CardHeader, CardFooter, Button, Progress } from "@nextui-org/react"
 import { ChartBullet, ChartLabel, ChartThemeColor } from '@patternfly/react-charts/victory';
-import { useState, useEffect } from 'react';
+import { BsStar, BsStarFill } from 'react-icons/bs';
+import { addFavourite, removeFavourite, isFavourite } from '@/state/favourites';
 
 const Company_Intro = ({ companyOverview, marketDetails }) => {
+    const [starred, setStarred] = useState(false);
+
+    useEffect(() => {
+        if (companyOverview?.company_name) {
+            setStarred(isFavourite(companyOverview.company_name));
+        }
+    }, [companyOverview?.company_name]);
+
+    const toggleFavourite = () => {
+        if (starred) {
+            removeFavourite(companyOverview.company_name);
+        } else {
+            addFavourite({ company: companyOverview.company_name, sector: companyOverview.company_sector });
+        }
+        setStarred(s => !s);
+    };
+
     if (!companyOverview) {
         return (<div>No data available</div>)
     }
@@ -12,11 +30,19 @@ const Company_Intro = ({ companyOverview, marketDetails }) => {
 
             <div className='grid grid-cols-2'>
                 <div>
-                    <div className='mx-2 mb-2 text-3xl font-bold'>
+                    <div className='mx-2 mb-2 text-3xl font-bold flex items-center gap-2'>
                         {companyOverview.company_name}&nbsp;&nbsp;
                         <span className="align-top text-default-700 text-sm dark:bg-primary-200 bg-primary-200" size="sm" color="primary" variant="solid">&nbsp;{companyOverview.company_ticker}&nbsp;</span>
                         &nbsp;
-                        <span className="align-top text-default-900 text-sm dark:bg-primary-100 bg-primary-100" size="sm" color="primary" variant="solid">CIK:&nbsp;{companyOverview.cik}&nbsp;</span></div>
+                        <span className="align-top text-default-900 text-sm dark:bg-primary-100 bg-primary-100" size="sm" color="primary" variant="solid">CIK:&nbsp;{companyOverview.cik}&nbsp;</span>
+                        <button
+                            onClick={toggleFavourite}
+                            title={starred ? 'Remove from favourites' : 'Add to favourites'}
+                            className="text-xl text-yellow-400 hover:text-yellow-500 transition-colors"
+                        >
+                            {starred ? <BsStarFill /> : <BsStar />}
+                        </button>
+                    </div>
                     <div className='mx-2 text-default-500'>
                         Sector: {companyOverview.company_sector}.
                         Report range from year {companyOverview.report_year_min} to {companyOverview.report_year_max}.<br />

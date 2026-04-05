@@ -317,3 +317,22 @@ table {
   overflow-y: auto;
   /* Enable vertical scrolling for the content */
 }
+
+@media print {
+  .sidebar_wrapper,
+  .sidebar_btn,
+  .export-btn {
+    display: none !important;
+  }
+
+  .keycontent {
+    margin-left: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  body {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+}
