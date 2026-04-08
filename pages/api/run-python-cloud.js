@@ -4,7 +4,7 @@ export default function handler(req, res) {
     if (req.method === 'POST') {
         const { input3, dbCredentials } = req.body;
 
-        const pythonCommand = 'py';
+        const pythonCommand = process.env.PYTHON_EXECUTABLE || 'py';
         const scriptPath = input3 + 'run_engine_update_cloud.py';
 
         if (!input3) {

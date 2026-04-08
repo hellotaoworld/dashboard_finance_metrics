@@ -9,7 +9,7 @@ export default function handler(req, res) {
         const var1 = Array.isArray(input1) && input1.length > 0 ? input1.join(',') : 'All';
         const var2 = Array.isArray(input2) && input2.length > 0 ? input2.join(',') : 'All';
 
-        const pythonCommand = 'py';
+        const pythonCommand = process.env.PYTHON_EXECUTABLE || 'py';
         const scriptPath = input3 + 'run_engine_company_year.py';
 
         if (!input3) {

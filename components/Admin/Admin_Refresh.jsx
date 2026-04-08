@@ -424,6 +424,7 @@ const AdminRefresh = () => {
                             onChange={(e) => setPyFolder(e.target.value)}
                             className="border p-1 w-full text-small text-default-500"
                         /></p>
+                    <p className="text-small mt-1">Python: <span className="text-small text-default-500">{process.env.NEXT_PUBLIC_PYTHON_EXECUTABLE || 'py (fallback)'}</span></p>
 
                     <button
                         className="bg-blue-600 text-white px-4 py-2 mt-4 max-w-md rounded hover:bg-blue-700"
