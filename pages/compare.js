@@ -13,6 +13,12 @@ const ComparePage = ({ sectors }) => {
     const [companiesA, setCompaniesA] = useState([]);
     const [companiesB, setCompaniesB] = useState([]);
 
+    // Committed values — only updated when user clicks Compare
+    const [committedA, setCommittedA] = useState('');
+    const [committedSectorA, setCommittedSectorA] = useState('');
+    const [committedB, setCommittedB] = useState('');
+    const [committedSectorB, setCommittedSectorB] = useState('');
+
     // Load all companies once on mount
     useEffect(() => {
         fetch('/api/companies/company')
@@ -49,7 +55,6 @@ const ComparePage = ({ sectors }) => {
     const handleCompanyAChange = (name) => {
         if (!name) return;
         setCompanyA(name);
-        // Auto-set sector if not already set
         if (!sectorA) {
             const match = allCompanies.find(c => c.company_name === name);
             if (match?.sector) setSectorA(match.sector);
@@ -65,7 +70,18 @@ const ComparePage = ({ sectors }) => {
         }
     };
 
+    const handleCompare = () => {
+        if (!companyA || !companyB) return;
+        const resolvedSectorA = sectorA || allCompanies.find(c => c.company_name === companyA)?.sector || '';
+        const resolvedSectorB = sectorB || allCompanies.find(c => c.company_name === companyB)?.sector || '';
+        setCommittedA(companyA);
+        setCommittedSectorA(resolvedSectorA);
+        setCommittedB(companyB);
+        setCommittedSectorB(resolvedSectorB);
+    };
+
     const bothSelected = companyA && companyB;
+    const isCompared = committedA && committedB;
 
     return (
         <main>
@@ -129,8 +145,22 @@ const ComparePage = ({ sectors }) => {
                     </div>
                 </div>
 
-                {!bothSelected && (
-                    <div className="flex justify-center mt-10">
+                <div className="flex justify-center mb-4">
+                    <button
+                        onClick={handleCompare}
+                        disabled={!bothSelected}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                            bothSelected
+                                ? 'bg-primary text-white hover:bg-primary/90'
+                                : 'bg-default-200 text-default-400 cursor-not-allowed'
+                        }`}
+                    >
+                        Compare Companies
+                    </button>
+                </div>
+
+                {!isCompared && (
+                    <div className="flex justify-center mt-6">
                         <div className="text-center max-w-sm">
                             <div className="text-6xl mb-5">⚖️</div>
                             <p className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Compare Two Companies</p>
@@ -139,18 +169,20 @@ const ComparePage = ({ sectors }) => {
                                     ? 'Select Company A and Company B from the pickers above to see a side-by-side breakdown of their financial metrics.'
                                     : !companyA
                                         ? 'Now select Company A to complete the comparison.'
-                                        : 'Now select Company B to complete the comparison.'}
+                                        : !companyB
+                                            ? 'Now select Company B to complete the comparison.'
+                                            : 'Click "Compare Companies" to load the comparison.'}
                             </p>
                         </div>
                     </div>
                 )}
 
-                {bothSelected && (
+                {isCompared && (
                     <CompareMain
-                        companyA={companyA}
-                        sectorA={sectorA}
-                        companyB={companyB}
-                        sectorB={sectorB}
+                        companyA={committedA}
+                        sectorA={committedSectorA}
+                        companyB={committedB}
+                        sectorB={committedSectorB}
                     />
                 )}
             </div>

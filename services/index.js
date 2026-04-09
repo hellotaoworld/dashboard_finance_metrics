@@ -197,6 +197,37 @@ export const getMetricDetails = async (v_sector) => {
     }
 }
 
+export const getMetricDetailsQuarterly = async (v_sector) => {
+    let connection;
+    try {
+        const query = `SELECT r.company_name, r.report_year, r.report_quarter,
+            r.metric_name, r.metric_value, r.metric_ranking,
+            f.formula_category, f.formula_type, r.industry as company_sector
+            FROM valuation_engine_metrics_ranking_quarterly r
+            LEFT JOIN valuation_engine_mapping_formula f ON r.metric_name = f.formula_shortname
+            WHERE r.industry = ?
+              AND f.formula_category <> 'Custom Ratio'
+              AND (r.report_year, r.report_quarter) IN (
+                SELECT t.report_year, t.report_quarter FROM (
+                  SELECT report_year, report_quarter
+                  FROM valuation_engine_metrics_ranking_quarterly
+                  GROUP BY report_year, report_quarter
+                  ORDER BY report_year DESC, report_quarter DESC
+                  LIMIT 8
+                ) t
+              )
+            ORDER BY r.report_year ASC, r.report_quarter ASC`;
+        connection = await createConnection();
+        const result = await connection.execute(query, [v_sector]);
+        return result[0];
+    } catch (error) {
+        console.error("Error in getMetricDetailsQuarterly:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end();
+    }
+}
+
 
 export const getCompanyOverview = async (v_company) => {
     let connection;
@@ -276,6 +307,72 @@ export const getCompanyMetricDetails = async (v_company) => {
     }
 }
 
+
+export const getCompanyMetricDetailsQuarterly = async (v_company) => {
+    let connection;
+    try {
+        const query = `SELECT r.company_name, r.report_year, r.report_quarter,
+            r.metric_name, r.metric_value, r.metric_ranking,
+            f.formula_category, f.formula_type, r.industry as company_sector
+            FROM valuation_engine_metrics_ranking_quarterly r
+            LEFT JOIN valuation_engine_mapping_formula f ON r.metric_name = f.formula_shortname
+            WHERE r.company_name = ?
+              AND f.formula_category <> 'Custom Ratio'
+              AND (r.report_year, r.report_quarter) IN (
+                SELECT t.report_year, t.report_quarter FROM (
+                  SELECT report_year, report_quarter
+                  FROM valuation_engine_metrics_ranking_quarterly
+                  GROUP BY report_year, report_quarter
+                  ORDER BY report_year DESC, report_quarter DESC
+                  LIMIT 8
+                ) t
+              )
+            ORDER BY r.report_year ASC, r.report_quarter ASC`;
+        connection = await createConnection();
+        const result = await connection.execute(query, [v_company]);
+        return result[0];
+    } catch (error) {
+        console.error("Error in getCompanyMetricDetailsQuarterly:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end();
+    }
+}
+
+export const getSectorDetailsQuarterly = async (v_sector) => {
+    let connection;
+    try {
+        const query = `SELECT m.metric_name, m.report_year, m.report_quarter,
+            (CASE WHEN f.formula_type='ratio' THEN avg(greatest(least(m.metric_value,2),-2))
+                  ELSE avg(m.metric_value) END) as avg,
+            count(distinct m.cik) as company_count,
+            f.formula_category, f.formula_type, f.formula_name
+            FROM valuation_engine_metrics_ranking_quarterly m
+            LEFT JOIN valuation_engine_mapping_formula f ON m.metric_name = f.formula_shortname
+            WHERE m.industry = ?
+              AND f.formula_category <> 'Custom Ratio'
+              AND (m.report_year, m.report_quarter) IN (
+                SELECT t.report_year, t.report_quarter FROM (
+                  SELECT report_year, report_quarter
+                  FROM valuation_engine_metrics_ranking_quarterly
+                  GROUP BY report_year, report_quarter
+                  ORDER BY report_year DESC, report_quarter DESC
+                  LIMIT 8
+                ) t
+              )
+            GROUP BY f.formula_type, f.formula_category, m.metric_name, f.formula_name,
+                     m.report_year, m.report_quarter
+            ORDER BY m.report_year ASC, m.report_quarter ASC`;
+        connection = await createConnection();
+        const result = await connection.execute(query, [v_sector]);
+        return result[0];
+    } catch (error) {
+        console.error("Error in getSectorDetailsQuarterly:", error);
+        throw error;
+    } finally {
+        if (connection) await connection.end();
+    }
+}
 
 export const getCompanyRanking = async (v_company) => {
     let connection;

@@ -23,11 +23,15 @@ const fmtDelta = (a, b) => {
     return sign + diff.toLocaleString(undefined, { maximumSignificantDigits: 3 });
 };
 
-const Compare_MetricTable = ({ metricsA, metricsB, metricList, companyA, companyB, yearA, yearB }) => {
+const Compare_MetricTable = ({ metricsA, metricsB, metricList, companyA, companyB, year, quarter, periodLabel }) => {
     const categories = [...new Set(metricList.map(m => m.formula_category))];
 
-    const getVal = (metrics, metricShortname, year) => {
-        const row = metrics.find(m => m.metric_name === metricShortname && String(m.report_year) === String(year));
+    const getVal = (metrics, metricShortname) => {
+        const row = metrics.find(m =>
+            m.metric_name === metricShortname &&
+            String(m.report_year) === String(year) &&
+            (!quarter || m.report_quarter === quarter)
+        );
         return row ? row.metric_value : null;
     };
 
@@ -42,15 +46,15 @@ const Compare_MetricTable = ({ metricsA, metricsB, metricList, companyA, company
                             <thead>
                                 <tr className="border-b border-default-200">
                                     <th className="text-left px-3 py-2 text-default-600 w-1/3">Metric</th>
-                                    <th className="text-right px-3 py-2 text-blue-600 dark:text-blue-400 w-1/4">{companyA} ({yearA})</th>
-                                    <th className="text-right px-3 py-2 text-orange-600 dark:text-orange-400 w-1/4">{companyB} ({yearB})</th>
+                                    <th className="text-right px-3 py-2 text-blue-600 dark:text-blue-400 w-1/4">{companyA} ({periodLabel})</th>
+                                    <th className="text-right px-3 py-2 text-orange-600 dark:text-orange-400 w-1/4">{companyB} ({periodLabel})</th>
                                     <th className="text-right px-3 py-2 text-default-500 w-1/6">Δ (A−B)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {categoryMetrics.map((m, i) => {
-                                    const valA = getVal(metricsA, m.formula_shortname, yearA);
-                                    const valB = getVal(metricsB, m.formula_shortname, yearB);
+                                    const valA = getVal(metricsA, m.formula_shortname);
+                                    const valB = getVal(metricsB, m.formula_shortname);
                                     return (
                                         <tr key={i} className="border-b border-default-100 hover:bg-default-50 dark:hover:bg-default-800/30">
                                             <td className="px-3 py-2 text-default-700">{m.formula_name}</td>

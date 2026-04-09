@@ -29,6 +29,9 @@ const CompanyMain = ({ sector, company }) => {
     const [rankingstats, setRankingstats] = useState([]);
     const [marketDetails, setmarketDetails] = useState([]);
     const [noteDetails, setNoteDetails] = useState(null);
+    const [metricDetailsQ, setMetricDetailsQ] = useState([]);
+    const [sectorDetailsQ, setSectorDetailsQ] = useState([]);
+    const [viewMode, setViewMode] = useState('annual');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -40,13 +43,15 @@ const CompanyMain = ({ sector, company }) => {
             fetch(`/api/companies/market/${encodeURIComponent(company)}`).then(r => r.json()),
             fetch(`/api/companies/url/${encodeURIComponent(company)}`).then(r => r.json()),
             fetch(`/api/companies/metrics/${encodeURIComponent(company)}`).then(r => r.json()),
+            fetch(`/api/companies/metrics-quarterly/${encodeURIComponent(company)}`).then(r => r.json()),
             fetch(`/api/companies/ranking/${encodeURIComponent(company)}`).then(r => r.json()),
             fetch(`/api/companies/notes/${encodeURIComponent(company)}`).then(r => r.json()),
-        ]).then(([overview, market, url, metrics, ranking, notes]) => {
+        ]).then(([overview, market, url, metrics, metricsQ, ranking, notes]) => {
             setcompanyOverview(overview[0]);
             setmarketDetails(market[0]);
             seturlDetails(url);
             setmetricDetails(metrics);
+            setMetricDetailsQ(metricsQ);
             setRankingstats(ranking);
             setNoteDetails(notes[0]);
             setIsLoading(false);
@@ -60,9 +65,11 @@ const CompanyMain = ({ sector, company }) => {
         Promise.all([
             fetch(`/api/sectors/metriclist/${sector}`).then(r => r.json()),
             fetch(`/api/sectors/details/${sector}`).then(r => r.json()),
-        ]).then(([metriclist, details]) => {
+            fetch(`/api/sectors/details-quarterly/${sector}`).then(r => r.json()),
+        ]).then(([metriclist, details, detailsQ]) => {
             setsectormetricList(metriclist);
             setsectorDetails(details);
+            setSectorDetailsQ(detailsQ);
         }).catch(() => {
             setError('Failed to load sector data. Please try again.');
         });
@@ -115,8 +122,12 @@ const CompanyMain = ({ sector, company }) => {
                     <div className='grid grid-flow-col col-span-3 gap-4'>
                         <Company_Metric_group
                             metricDetails={metricDetails}
-                            company={company}
+                            metricDetailsQ={metricDetailsQ}
                             sectorDetails={sectorDetails}
+                            sectorDetailsQ={sectorDetailsQ}
+                            viewMode={viewMode}
+                            setViewMode={setViewMode}
+                            company={company}
                             sectormetricList={sectormetricList} companyOverview={companyOverview}></Company_Metric_group>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import Company_Metric_graphcard from './Company_Metric_graphcard'
 import { Tabs, Tab } from '@nextui-org/react';
 import { Card, CardBody } from '@nextui-org/react';
 
-const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormetricList, companyOverview }) => {
+const Company_Metric_group = ({ metricDetails, metricDetailsQ, sectorDetails, sectorDetailsQ, viewMode, setViewMode, company, sectormetricList, companyOverview }) => {
     const exchangeMapping = {
         NYQ: "NYSE",
         NMS: "NASDAQ",
@@ -19,45 +19,59 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
     const metricGroup = [...new Set(sectormetricList.map(metricList => metricList.formula_category))]
     const sectormetricFieldName = [...new Set(sectormetricList.map(sectormetricList => sectormetricList.formula_shortname))]
 
+    const activeMetrics = viewMode === 'quarterly' ? (Array.isArray(metricDetailsQ) ? metricDetailsQ : []) : metricDetails;
+    const activeSector  = viewMode === 'quarterly' ? (Array.isArray(sectorDetailsQ) ? sectorDetailsQ : []) : sectorDetails;
+
+    const periodKey = (item) => viewMode === 'quarterly'
+        ? `${item.report_year} ${item.report_quarter}`
+        : item.report_year;
+
     const metricData = [];
     sectormetricFieldName.forEach(metric => {
-        const metricDataEntry = metricDetails.filter(metricDetails => metricDetails.metric_name == metric).reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.metric_value;  // Assuming you want to use dynamic metric
+        const metricDataEntry = activeMetrics.filter(m => m.metric_name == metric).reduce((accumulator, item) => {
+            accumulator[periodKey(item)] = item.metric_value;
             return accumulator;
         }, {});
 
-        const sectormetricArray = sectorDetails.filter(sectorDetails => sectorDetails.metric_name == metric).reduce((accumulator, item) => {
-            accumulator[item.report_year] = null;  // Assuming you want to use dynamic metric
+        const sectormetricArray = activeSector.filter(s => s.metric_name == metric).reduce((accumulator, item) => {
+            accumulator[periodKey(item)] = null;
             return accumulator;
         }, {});
         Object.keys(metricDataEntry).length > 1 ?
-            metricData.push({
-                key: [metric],
-                data: metricDataEntry
-            })
-            : metricData.push({
-                key: [metric],
-                data: sectormetricArray
-            })
+            metricData.push({ key: [metric], data: metricDataEntry })
+            : metricData.push({ key: [metric], data: sectormetricArray })
     });
-
 
     const sectormetricData = [];
     sectormetricFieldName.forEach(metric => {
-        const metricDataEntry = sectorDetails.filter(sectorDetails => sectorDetails.metric_name == metric).reduce((accumulator, item) => {
-            accumulator[item.report_year] = item.avg;  // Assuming you want to use dynamic metric
+        const metricDataEntry = activeSector.filter(s => s.metric_name == metric).reduce((accumulator, item) => {
+            accumulator[periodKey(item)] = item.avg;
             return accumulator;
         }, {});
 
-        sectormetricData.push({
-            key: [metric],
-            data: metricDataEntry
-        });
+        sectormetricData.push({ key: [metric], data: metricDataEntry });
     });
-
 
     return (
         <div>
+            <div className="flex gap-2 mb-3">
+                <button
+                    onClick={() => setViewMode('annual')}
+                    className={`text-xs px-3 py-1.5 rounded transition-colors ${
+                        viewMode === 'annual'
+                            ? 'bg-primary text-white'
+                            : 'bg-default-200 hover:bg-default-300 text-default-700'
+                    }`}
+                >Annual</button>
+                <button
+                    onClick={() => setViewMode('quarterly')}
+                    className={`text-xs px-3 py-1.5 rounded transition-colors ${
+                        viewMode === 'quarterly'
+                            ? 'bg-primary text-white'
+                            : 'bg-default-200 hover:bg-default-300 text-default-700'
+                    }`}
+                >Quarterly</button>
+            </div>
             <Tabs aria-label="Graphs" >
                 <Tab key={0} title="Trading View">
                     <Card>
@@ -70,7 +84,6 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
                             ></iframe>
                         </CardBody>
                     </Card>
-
                 </Tab>
                 {metricGroup.map((group, i) => (
                     <Tab key={i + 1} title={group}>
@@ -79,21 +92,17 @@ const Company_Metric_group = ({ metricDetails, company, sectorDetails, sectormet
                                 .map((item, index) => (
                                     <div key={index}>
                                         <Company_Metric_graphcard
-                                            input={metricData.filter(metricData => metricData.key == item.formula_shortname)[0].data}
-                                            sectorinput={sectormetricData.filter(sectormetricData => sectormetricData.key == item.formula_shortname)[0].data}
-                                            metric={[item.formula_name,
-                                            item.formula_pseudo_code,
-                                                company]}
-                                            rank={metricDetails.filter(metricDetailItem => metricDetailItem.metric_name === item.formula_shortname)}
-                                            sector={sectorDetails}>
+                                            input={metricData.filter(m => m.key == item.formula_shortname)[0].data}
+                                            sectorinput={sectormetricData.filter(s => s.key == item.formula_shortname)[0].data}
+                                            metric={[item.formula_name, item.formula_pseudo_code, company]}
+                                            rank={activeMetrics.filter(m => m.metric_name === item.formula_shortname)}
+                                            sector={activeSector}>
                                         </Company_Metric_graphcard>
                                     </div>
                                 ))}
                         </div>
-
                     </Tab>
                 ))}
-
             </Tabs>
         </div >
     )
